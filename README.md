@@ -1,17 +1,18 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/a-5mB3GB)
+
 # final-project-skeleton
 
-**Team Number:**
+**Team Number: T01**
 
 **Team Name:**
 
-| Team Member Name | Email Address       |
-|------------------|---------------------|
-| [Name 1]         | [Email 1]           |
-| [Name 2]         | [Email 2]           |
-| [Name 3]         | [Email 3]           |
+| Team Member Name | Email Address          |
+| ---------------- | ---------------------- |
+| Shunyao Jiang    | jiang24@seas.upenn.edu |
+| [Name 2]         | [Email 2]              |
+| [Name 3]         | [Email 3]              |
 
-**GitHub Repository URL:**
+**GitHub Repository URL: https://github.com/upenn-embedded/final-project-f25-f25-final_project_t1.git**
 
 **GitHub Pages Website URL:** [for final submission]*
 
