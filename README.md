@@ -6,11 +6,11 @@
 
 **Team Name:**
 
-| Team Member Name | Email Address          |
-| ---------------- | ---------------------- |
-| Shunyao Jiang    | jiang24@seas.upenn.edu |
-| [Name 2]         | [Email 2]              |
-| [Name 3]         | [Email 3]              |
+| Team Member Name | Email Address           |
+| ---------------- | ----------------------- |
+| Shunyao Jiang    | jiang24@seas.upenn.edu  |
+| Sirui Wu         | wu40@seas.upenn.edu     |
+| Jingyi Huang     | huang965@seas.upenn.edu |
 
 **GitHub Repository URL: https://github.com/upenn-embedded/final-project-f25-f25-final_project_t1.git**
 
