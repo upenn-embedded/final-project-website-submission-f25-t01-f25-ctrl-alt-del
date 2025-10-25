@@ -38,7 +38,6 @@ Unlike conventional gesture-recognition systems that depend on cameras or visual
 
 *Show your high level design, as done in WS1 and WS2. What are the critical components in your system? How do they communicate (I2C?, interrupts, ADC, etc.)? What power regulation do you need?*
 
-
 ### 4. Design Sketches
 
 *What will your project look like? Do you have any critical design features? Will you need any special manufacturing techniques to achieve your vision, like power tools, laser cutting, or 3D printing?  Submit drawings for this section.*
@@ -74,14 +73,23 @@ Here, you will define any special terms, acronyms, or abbreviations you plan to 
 
 Here, you will define any special terms, acronyms, or abbreviations you plan to use for hardware
 
+* **IR (Infrared)** – Refers to electromagnetic radiation in the 850–950 nm range (typically 940 nm) used for remote control communication.
+* **Carrier** – The modulated carrier frequency, typically 38 kHz ± 1 kHz.
+* **NEC / RC5 / RC6** – Common IR remote control communication protocols.
+* **IR Learning (Pairing)** – The process of capturing, decoding, and storing the waveform of an external remote control signal for later replay.
+* **LOS (Line-of-Sight)** – Direct visibility path between transmitter and receiver.
+* **FOV (Field of View)** – The angular range within which the IR link remains functional.
+* **RMT / PWM** – ESP32 peripherals used for 38 kHz carrier modulation and precise pulse generation.
+* **EEPROM / Flash** – Non-volatile memory used to store learned IR codes persistently.
+
 **6.2 Functionality**
 
-| ID     | Description                                                                                                                        |
-| ------ | ---------------------------------------------------------------------------------------------------------------------------------- |
-| HRS-01 | A distance sensor shall be used for obstacle detection. The sensor shall detect obstacles at a maximum distance of at least 10 cm. |
-| HRS-02 | A noisemaker shall be inside the trap with a strength of at least 55 dB.                                                           |
-| HRS-03 | An electronic motor shall be used to reset the trap remotely and have a torque of 40 Nm in order to reset the trap mechanism.      |
-| HRS-04 | A camera sensor shall be used to capture images of the trap interior. The resolution shall be at least 480p.                       |
+| ID     | Description                                                                                                                                                                                                        |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| HRS-01 | **IR Learning and Storage:** The system shall support learning and storing at least **12 unique IR codes** (any common protocol: NEC, RC5, RC6, or raw waveform). Codes must persist after power loss. |
+| HRS-02 | **Carrier and Pulse Accuracy:** The IR carrier frequency shall be  **38 kHz ± 1 kHz** , and each pulse width deviation shall be **≤ ±5 %** compared to the learned waveform.                  |
+| HRS-03 | **Angular Coverage:** At a fixed 3 m distance, reliable operation shall be maintained within  **±25° horizontally** .                                                                                |
+| HRS-04 | **Effective Range:** The IR transmission shall operate reliably at a minimum distance of **8 m** under indoor LOS conditions.                                                                          |
 
 ### 7. Bill of Materials (BOM)
 
