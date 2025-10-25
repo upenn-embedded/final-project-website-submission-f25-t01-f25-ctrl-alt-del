@@ -6,11 +6,11 @@
 
 **Team Name:**
 
-| Team Member Name | Email Address          |
-| ---------------- | ---------------------- |
-| Shunyao Jiang    | jiang24@seas.upenn.edu |
-| [Name 2]         | [Email 2]              |
-| [Name 3]         | [Email 3]              |
+| Team Member Name | Email Address           |
+| ---------------- | ----------------------- |
+| Shunyao Jiang    | jiang24@seas.upenn.edu  |
+| Sirui Wu         | wu40@seas.upenn.edu     |
+| Jingyi Huang     | huang965@seas.upenn.edu |
 
 **GitHub Repository URL: https://github.com/upenn-embedded/final-project-f25-f25-final_project_t1.git**
 
@@ -22,13 +22,23 @@
 
 *In a few sentences, describe your final project.*
 
+We propose a gesture-controlled smart-home wristband that enables users to control nearby appliances simply by pointing and performing  intuitive hand gestures . The system integrates Ultra-Wideband (UWB) 3-D positioning with IMU-based orientation sensing to identify which appliance the user is pointing at. Gestures such as opening a hand or lifting the wrist transmit wireless commands (via infrared) to devices such as lights, fans, and air-conditioners. This project demonstrates low-latency spatial awareness and natural human–machine interaction on an embedded platform.
+
 ### 2. Motivation
 
 *What is the problem that you are trying to solve? Why is this project interesting? What is the intended purpose?*
 
+People often misplace their remote control or phone when sitting on the sofa or chair. Traditional home appliances are typically operated through wall switches or dedicated remotes, while modern smart-home devices rely on smartphone apps or voice assistants. Both approaches require extra steps — such as picking up the phone, finding the right app, or issuing voice commands — which can be  slow, inconvenient, or error-prone , especially when voice recognition fails in noisy environments.
+
+Furthermore, most current smart-home systems require appliances to have built-in IoT modules, making it difficult for legacy devices to be integrated. We aim to create a wearable, unobtrusive wristband that allows users to control any household appliance intuitively through  pointing and hand gestures . By deploying several  UWB anchors , the system models the spatial positions of appliances and determines which one the user is pointing at. Once paired, a central IR blaster located in the room sends the proper infrared signal to perform the desired action, enabling seamless control of both modern and traditional appliances —  without a phone, app, or voice assistant .
+
+Unlike conventional gesture-recognition systems that depend on cameras or visual tracking, our design uses only  on-board IMU sensors and UWB localization , ensuring complete user privacy while significantly reducing computational cost and environmental constraints.
+
 ### 3. System Block Diagram
 
 *Show your high level design, as done in WS1 and WS2. What are the critical components in your system? How do they communicate (I2C?, interrupts, ADC, etc.)? What power regulation do you need?*
+
+12412312
 
 ### 4. Design Sketches
 
