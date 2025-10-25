@@ -38,11 +38,12 @@ Unlike conventional gesture-recognition systems that depend on cameras or visual
 
 *Show your high level design, as done in WS1 and WS2. What are the critical components in your system? How do they communicate (I2C?, interrupts, ADC, etc.)? What power regulation do you need?*
 
-12412312
 
 ### 4. Design Sketches
 
 *What will your project look like? Do you have any critical design features? Will you need any special manufacturing techniques to achieve your vision, like power tools, laser cutting, or 3D printing?  Submit drawings for this section.*
+
+![1761425411592](image/README/1761425411592.png)
 
 ### 5. Software Requirements Specification (SRS)
 
