@@ -76,23 +76,24 @@ Here, you will define any special terms, acronyms, or abbreviations you plan to 
 
 Here, you will define any special terms, acronyms, or abbreviations you plan to use for hardware
 
-* **IR (Infrared)** – Refers to electromagnetic radiation in the 850–950 nm range (typically 940 nm) used for remote control communication.
-* **Carrier** – The modulated carrier frequency, typically 38 kHz ± 1 kHz.
-* **NEC / RC5 / RC6** – Common IR remote control communication protocols.
-* **IR Learning (Pairing)** – The process of capturing, decoding, and storing the waveform of an external remote control signal for later replay.
-* **LOS (Line-of-Sight)** – Direct visibility path between transmitter and receiver.
-* **FOV (Field of View)** – The angular range within which the IR link remains functional.
-* **RMT / PWM** – ESP32 peripherals used for 38 kHz carrier modulation and precise pulse generation.
-* **EEPROM / Flash** – Non-volatile memory used to store learned IR codes persistently.
+* IR (Infrared) – Refers to electromagnetic radiation in the 850–950 nm range (typically 940 nm) used for remote control communication.
+* Carrier – The modulated carrier frequency, typically 38 kHz ± 1 kHz.
+* NEC / RC5 / RC6 – Common IR remote control communication protocols.
+* IR Learning (Pairing) – The process of capturing, decoding, and storing the waveform of an external remote control signal for later replay.
+* LOS (Line-of-Sight) – Direct visibility path between transmitter and receiver.
+* FOV (Field of View) – The angular range within which the IR link remains functional.
+* RMT / PWM – ESP32 peripherals used for 38 kHz carrier modulation and precise pulse generation.
+* EEPROM / Flash – Non-volatile memory used to store learned IR codes persistently.
 
 **6.2 Functionality**
 
-| ID     | Description                                                                                                                                                                                                        |
-| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| HRS-01 | **IR Learning and Storage:** The system shall support learning and storing at least **12 unique IR codes** (any common protocol: NEC, RC5, RC6, or raw waveform). Codes must persist after power loss. |
-| HRS-02 | **Carrier and Pulse Accuracy:** The IR carrier frequency shall be  **38 kHz ± 1 kHz** , and each pulse width deviation shall be **≤ ±5 %** compared to the learned waveform.                  |
-| HRS-03 | **Angular Coverage:** At a fixed 3 m distance, reliable operation shall be maintained within  **±25° horizontally** .                                                                                |
-| HRS-04 | **Effective Range:** The IR transmission shall operate reliably at a minimum distance of **8 m** under indoor LOS conditions.                                                                          |
+| ID     | Description                                                                                                                                                                                    |
+| ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| HRS-01 | IR Learning and Storage: The system shall support learning and storing at least 12 unique IR codes (any common protocol: NEC, RC5, RC6, or raw waveform). Codes must persist after power loss. |
+| HRS-02 | Carrier and Pulse Accuracy: The IR carrier frequency shall be  38 kHz ± 1 kHz , and each pulse width deviation shall be ≤ ±5 % compared to the learned waveform.                            |
+| HRS-03 | Angular Coverage: At a fixed 3 m distance, reliable operation shall be maintained within  ±25° horizontally .                                                                                |
+| HRS-04 | Effective Range: The IR transmission shall operate reliably at a minimum distance of 8 m under indoor LOS conditions.                                                                          |
+| HRS-05 | Repeatability and Reliability:For identical commands sent repeatedly 100 times , the receiver shall correctly recognize at least99 %**of transmissions.                                        |
 
 ### 7. Bill of Materials (BOM)
 
