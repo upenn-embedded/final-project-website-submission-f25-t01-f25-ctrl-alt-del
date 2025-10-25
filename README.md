@@ -36,7 +36,10 @@ Unlike conventional gesture-recognition systems that depend on cameras or visual
 
 ### 3. System Block Diagram
 
-*Show your high level design, as done in WS1 and WS2. What are the critical components in your system? How do they communicate (I2C?, interrupts, ADC, etc.)? What power regulation do you need?*
+Draft:
+![bd](089630a66a3f36d4d77707294519bcd7.jpg)
+
+![1761426687986](image/README/1761426687986.png)
 
 ### 4. Design Sketches
 
