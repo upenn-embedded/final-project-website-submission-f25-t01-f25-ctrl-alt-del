@@ -22,17 +22,19 @@
 
 *In a few sentences, describe your final project.*
 
-We propose a gesture-controlled smart-home wristband that enables users to control nearby appliances simply by pointing and performing  intuitive hand gestures . The system integrates Ultra-Wideband (UWB) 3-D positioning with IMU-based orientation sensing to identify which appliance the user is pointing at. Gestures such as opening a hand or lifting the wrist transmit wireless commands (via infrared) to devices such as lights, fans, and air-conditioners. This project demonstrates low-latency spatial awareness and natural human–machine interaction on an embedded platform.
+We propose a gesture-controlled smart-home wristband that enables users to control nearby appliances simply by pointing and performing intuitive hand gestures. The system uses infrared (IR) pairing and communication together with IMU-based orientation sensing to identify and control the target device. Gestures such as opening a hand or lifting the wrist transmit IR commands to appliances such as lights, fans, and air-conditioners. This project demonstrates a low-latency, privacy-preserving, and intuitive approach to human–machine interaction using embedded sensing and wireless control.
 
 ### 2. Motivation
 
 *What is the problem that you are trying to solve? Why is this project interesting? What is the intended purpose?*
 
-People often misplace their remote control or phone when sitting on the sofa or chair. Traditional home appliances are typically operated through wall switches or dedicated remotes, while modern smart-home devices rely on smartphone apps or voice assistants. Both approaches require extra steps — such as picking up the phone, finding the right app, or issuing voice commands — which can be  slow, inconvenient, or error-prone , especially when voice recognition fails in noisy environments.
+People often misplace their remote control or phone when sitting on the sofa or chair. Traditional home appliances are typically operated through wall switches or dedicated remotes, while modern smart-home devices rely on smartphone apps or voice assistants. Both approaches require extra steps — such as picking up the phone, finding the right app, or issuing voice commands — which can be  slow, inconvenient, or unreliable , especially in noisy environments where voice recognition fails.
 
-Furthermore, most current smart-home systems require appliances to have built-in IoT modules, making it difficult for legacy devices to be integrated. We aim to create a wearable, unobtrusive wristband that allows users to control any household appliance intuitively through  pointing and hand gestures . By deploying several  UWB anchors , the system models the spatial positions of appliances and determines which one the user is pointing at. Once paired, a central IR blaster located in the room sends the proper infrared signal to perform the desired action, enabling seamless control of both modern and traditional appliances —  without a phone, app, or voice assistant .
+Furthermore, most current smart-home systems require appliances to have built-in IoT modules, making it difficult for legacy devices to be integrated. We aim to create a wearable, unobtrusive wristband that allows users to control any household appliance intuitively through  pointing and hand gestures .
 
-Unlike conventional gesture-recognition systems that depend on cameras or visual tracking, our design uses only  on-board IMU sensors and UWB localization , ensuring complete user privacy while significantly reducing computational cost and environmental constraints.
+Each appliance is equipped with a unique infrared (IR) code that can be paired with the wristband through a simple  IR pairing process . When the user points toward a specific device, the wristband determines the target direction using its  IMU orientation data , verifies the paired IR code, and transmits the corresponding IR control signal to perform the intended action.
+
+This approach enables seamless control of both modern and traditional appliances —  without a phone, app, or voice assistant . Unlike camera-based gesture systems, our design uses only  on-board IMU and infrared communication , ensuring complete privacy, low power consumption, and real-time response in any lighting condition.
 
 ### 3. System Block Diagram
 
