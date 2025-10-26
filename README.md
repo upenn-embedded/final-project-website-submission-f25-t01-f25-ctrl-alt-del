@@ -1,10 +1,10 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/a-5mB3GB)
 
-# final-project-skeleton
+# Home maestro
 
 **Team Number: T01**
 
-**Team Name:**
+**Team Name:Ctrl-Alt-Del**
 
 | Team Member Name | Email Address           |
 | ---------------- | ----------------------- |
