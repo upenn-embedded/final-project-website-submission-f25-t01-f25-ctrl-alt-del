@@ -122,11 +122,11 @@ Here, you will define any special terms, acronyms, or abbreviations you plan to 
 
 ### 7. Bill of Materials (BOM)
 
-
+[BOM](https://docs.google.com/spreadsheets/d/1c-6980lmOFAT00yxSfOrNvSX52xN2UV2bh0UHBwkyfA/edit?usp=sharing)
 
 ### 8. Final Demo Goals
 
-[BOM](https://docs.google.com/spreadsheets/d/1c-6980lmOFAT00yxSfOrNvSX52xN2UV2bh0UHBwkyfA/edit?usp=sharing)
+
 
 ### 9. Sprint Planning
 
