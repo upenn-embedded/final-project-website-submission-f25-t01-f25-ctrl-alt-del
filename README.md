@@ -126,7 +126,7 @@ Here, you will define any special terms, acronyms, or abbreviations you plan to 
 
 ### 8. Final Demo Goals
 
-*How will you demonstrate your device on demo day? Will it be strapped to a person, mounted on a bicycle, require outdoor space? Think of any physical, temporal, and other constraints that could affect your planning.*
+[BOM](https://docs.google.com/spreadsheets/d/1c-6980lmOFAT00yxSfOrNvSX52xN2UV2bh0UHBwkyfA/edit?usp=sharing)
 
 ### 9. Sprint Planning
 
