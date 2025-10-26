@@ -39,7 +39,7 @@ This approach enables seamless control of both modern and traditional appliances
 ### 3. System Block Diagram
 
 Draft:
-![bd](089630a66a3f36d4d77707294519bcd7.jpg)
+![bd](./image/README/089630a66a3f36d4d77707294519bcd7.jpg)
 
 Block Diagram:
 ![1761426687986](image/README/1761426687986.png)
