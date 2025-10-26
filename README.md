@@ -118,6 +118,7 @@ The hardware is designed to ensure that infrared (IR) selection, IMU-based contr
 | **HRS-05 (PWM Output Hardware)** | Each terminal shall generate motor control signals using the ESP32 LEDC peripheral at **20 kHz ± 0.5 kHz**, with duty-cycle linearity error ≤ **±5 %FS** over 0–100 %. |
 | **HRS-06 (Power and Protection)** | All boards shall operate from a regulated **5 V ± 5 %** supply; the IR LED driver shall limit continuous current to **≤ 100 mA** and include reverse-polarity and over-current protection. |
 | **HRS-07 (Non-Volatile Data Retention)** | Terminal IDs, IMU calibration data, and learned IR codes shall be stored in on-board Flash memory and retain integrity for **≥ 100 power cycles** or **1 year** without power. |
+
 ### 7. Bill of Materials (BOM)
 
 [BOM](https://docs.google.com/spreadsheets/d/1c-6980lmOFAT00yxSfOrNvSX52xN2UV2bh0UHBwkyfA/edit?usp=sharing)
