@@ -113,14 +113,16 @@ Here, you will define any special terms, acronyms, or abbreviations you plan to 
 
 **6.2 Functionality**
 
-|                                                | Description|                                                                     Verification Method                                                                                                   |
-| ---------------------------------------------- |--------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **HRS-01 (IR Selection and Detection)**  | The controller shall transmit modulated IR bursts at 38 kHz. A valid hit shall be recognized and reported to the controller within. |Point to different terminal many times to veritify the selection. |
-| **HRS-02 (IR Coverage and Range)**       | The IR link shall maintain reliable operation at 3 m ±45 degree in front of receiver under standard indoor lighting                                                                                  |Point at the same terminal in different angle many time and show the result. |
+### 6. Hardware Requirements Specification (HRS)
 
-| **HRS-03 (IMU Sampling and Interface)**  | The IMU module shall output 3-axis acceleration and angular velocity data at ≥ 100 Hz, communicating with the controller via I²C (400 kHz bus).                                                                               |Use UART to print the raw data from IMU and check if it is stable|
-| **HRS-04 (PWM Output Hardware)**         | FAN terminal's ESP32 shall generate motor control signals with different Freq and duty cycle                                                                               |Change the command and see the output PWM using Oscilloscope|
-| **HRS-05 (Power and Protection)**        | All boards shall operate from a regulated 5 V ± 5 % supply; the IR LED driver shall limit continuous current to ≤ 200 mA and include reverse-polarity and over-current protection.                                                                        |Use DMM to test all connection, voltage and current.|
+| ID | Description | Verification Method |
+|----|--------------|---------------------|
+| **HRS-01 (IR Selection and Detection)** | The controller shall transmit modulated IR bursts at 38 kHz. A valid hit shall be recognized and reported to the controller within 50 ms. | Point to different terminals many times to verify the selection. |
+| **HRS-02 (IR Coverage and Range)** | The IR link shall maintain reliable operation at 3 m ± 45° in front of the receiver under standard indoor lighting. | Point at the same terminal from different angles many times and show the result. |
+| **HRS-03 (IMU Sampling and Interface)** | The IMU module shall output 3-axis acceleration and angular-velocity data at ≥ 100 Hz, communicating with the controller via I²C (400 kHz). | Use UART to print the raw data from the IMU and check if it is stable. |
+| **HRS-04 (PWM Output Hardware)** | The fan terminal’s ESP32 shall generate motor-control signals with different frequencies and duty cycles. | Change the command and observe the output PWM using an oscilloscope. |
+| **HRS-05 (Power and Protection)** | All boards shall operate from a regulated 5 V ± 5 % supply; the IR-LED driver shall limit continuous current to ≤ 200 mA and include reverse-polarity and over-current protection. | Use a DMM to test all connections, voltage, and current. |
+
 
 
 ### 7. Bill of Materials (BOM)
