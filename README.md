@@ -43,7 +43,7 @@ This approach enables seamless control of both modern and traditional appliances
 ### 3. System Block Diagram
 
 Draft:
-![bd](089630a66a3f36d4d77707294519bcd7.jpg)
+![bd](./image/README/089630a66a3f36d4d77707294519bcd7.jpg)
 
 Block Diagram:
 ![1761426687986](image/README/1761426687986.png)
@@ -59,12 +59,12 @@ Block Diagram:
 The system shall:
 
 1. Detect and classify hand and wrist gestures using IMU sensor data.
-2. Allow device selection either by infrared pointing or  gesture-based cycling .
-3. Communicate with the central ESP32 controller through infrared signals for pairing.
+2. Allow device selection either by infrared pointing or gesture-based (backup) cycling .
+3. IR LED for pairing.
 4. Transmit control commands (ON/OFF, mode, level, or value changes) to the ESP32 controller wirelessly.
 5. Provide real-time visual feedback on the wrist LCD and haptic feedback via the vibration motor.
 6. Update controlled devices'  states (fan, light, air conditioner demo screen, music player) accordingly.
-7. Handle invalid gestures or pairing timeouts with error messages or vibration alerts.
+
 
 **5.1 Definitions, Abbreviation**
 
@@ -82,12 +82,12 @@ The system shall:
 
 | ID     | Description (Measurable Requirement)                                                                   | Verification Method                                                             |
 | ------ | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------- |
-| HRS-01 | The IMU sensor shall detect wrist rotation and acceleration with an accuracy of ±10%.                 | Verify through calibration and comparison with known angles.                    |
-| HRS-02 | The IR transmitter shall emit a signal detectable by receivers within 2 m in normal lighting.          | Measure IR detection distance and angle using oscilloscope or IR sensor output. |
-| HRS-03 | The ESP32 shall process gesture inputs and send control signals with latency <200 ms.                 | Measure command processing delay using timestamps or GPIO toggles.              |
-| HRS-04 | The vibration motor shall generate a feedback pulse of 200 ± 50 ms duration after each valid command. | Measure motor activation time with oscilloscope or stopwatch.                   |
-| HRS-05 | The LCD display shall update device and command information within 200 ms of command recognition.      | Observe update speed using timestamped logs or slow-motion video.               |
-| HRS-06 | The receiver ESP32 shall control all four output devices independently without interference.           | Test each device's response and confirm no cross-triggering among outputs.      |
+| HRS-01 | The IMU sensor shall detect wrist rotation and acceleration with an accuracy of ±10%.                 | Use usrt output wrist ratation and compare with real movitation         |
+| HRS-02 | The IR transmitter shall emit a signal detectable by receivers within 3 m in normal lighting.          | Measure IR detection distance and angle using IR receiver output. |
+| HRS-03 | The ESP32 shall process gesture inputs and send control signals with latency <500 ms.                 | Control buzzer to beep when gesture happens, using stopwatch to record respond time             |
+| HRS-04 | The vibration motor shall generate a feedback pulse of 200 ± 50 ms duration after each pairing success. | Measure motor activation time with stopwatch.                   |
+| HRS-05 | The LCD display shall update device and command information within 1s of command recognition.      | Observe update speed using timestamped logs or slow-motion video.               |
+| HRS-06 | The receiver ESP32 shall control all four output devices.          | Test each device's response      |
 
 ### 6. Hardware Requirements Specification (HRS)
 
@@ -126,7 +126,7 @@ Here, you will define any special terms, acronyms, or abbreviations you plan to 
 
 ### 7. Bill of Materials (BOM)
 
-[BOM](https://docs.google.com/spreadsheets/d/1c-6980lmOFAT00yxSfOrNvSX52xN2UV2bh0UHBwkyfA/edit?usp=sharing)
+[BOM](https://docs.google.com/spreadsheets/d/1ShClJ0_CxjcdzTeQjC180BvYrUsWIu_XtLVTxZC1Zqk/edit?usp=sharing)
 
 ### 8. Final Demo Goals
 
