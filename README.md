@@ -1,10 +1,10 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/a-5mB3GB)
 
-# Home maestro
+# final-project-skeleton
 
 **Team Number: T01**
 
-**Team Name:Ctrl-Alt-Del**
+**Team Name:**
 
 | Team Member Name | Email Address           |
 | ---------------- | ----------------------- |
@@ -22,7 +22,11 @@
 
 *In a few sentences, describe your final project.*
 
-We propose a gesture-controlled smart-home wristband that enables users to control nearby appliances simply by pointing and performing intuitive hand gestures. The system uses infrared (IR) pairing and communication together with IMU-based orientation sensing to identify and control the target device. Gestures such as opening a hand or lifting the wrist transmit IR commands to appliances such as lights, fans, and air-conditioners. This project demonstrates a low-latency, privacy-preserving, and intuitive approach to human–machine interaction using embedded sensing and wireless control.
+Our system is a gesture-controlled smart home wristband that enables users to control multiple household devices. The wrist module integrates an ESP32, IMU, LCD display, vibration motor (for user feedback), ATmega32 , and  infrared transmitter . It recognizes gestures to generate control commands and allows users to select the target device either by pointing with the infrared beam or by waving to cycle through devices shown on the wrist display.
+
+Each appliance has its  own infrared receiver  managed by a  single ESP32 controller, which interprets the IR pairing signals and executes the corresponding control actions.  After pairing, the ESP32 processes the recognized gestures to control both the power state (ON/OFF) and functional parameters of each device. For example, adjust fan speed, change lighting color/brightness, change the temperature and mode of air conditioner represents by LCD, and the music player supports  play/pause, track switching, and volume adjustment .
+
+The LCD on the wristband indicates the currently selected device and recognized command, while the vibration motor provides tactile feedback to the user after each successful gesture.
 
 ### 2. Motivation
 
@@ -39,7 +43,7 @@ This approach enables seamless control of both modern and traditional appliances
 ### 3. System Block Diagram
 
 Draft:
-![bd](./image/README/089630a66a3f36d4d77707294519bcd7.jpg)
+![bd](089630a66a3f36d4d77707294519bcd7.jpg)
 
 Block Diagram:
 ![1761426687986](image/README/1761426687986.png)
@@ -54,70 +58,71 @@ Block Diagram:
 
 The system shall:
 
-1. Select a terminal using IR signals.
-2. Generate control values from IMU sensor data;
-3. Send control commands via UDP to only the selected terminal;
-4. Ensure reliable communication and data persistence.
+1. Detect and classify hand and wrist gestures using IMU sensor data.
+2. Allow device selection either by infrared pointing or  gesture-based cycling .
+3. Communicate with the central ESP32 controller through infrared signals for pairing.
+4. Transmit control commands (ON/OFF, mode, level, or value changes) to the ESP32 controller wirelessly.
+5. Provide real-time visual feedback on the wrist LCD and haptic feedback via the vibration motor.
+6. Update controlled devices'  states (fan, light, air conditioner demo screen, music player) accordingly.
+7. Handle invalid gestures or pairing timeouts with error messages or vibration alerts.
 
-**5.1 Definitions, Abbreviations**
+**5.1 Definitions, Abbreviation**
 
-| Term | Definition |
-|------|-------------|
-| **IR (Infrared)** | Infrared radiation used for terminal selection via 38 kHz ± 1 kHz carrier modulation. |
-| **LOS (Line-of-Sight)** | Direct optical path between transmitter (IR LED) and receiver (IR sensor). |
-| **IMU (Inertial Measurement Unit)** | Sensor providing 3-axis acceleration and angular velocity, used to generate control values (e.g., PWM duty). |
-| **LEDC / PWM** | ESP32 hardware PWM peripheral used for motor control output. |
-| **UDP** | User Datagram Protocol used for communication between controller and terminals. |
-| **ACK** | Acknowledgment packet returned by a terminal after a command is executed. |
-| **Select (Selection)** | The process where the controller designates one terminal as the current active device through IR hit detection. |
-| **RTT (Round-Trip Time)** | Time between command transmission and action confirmation. |
-| **Flash** | Non-volatile memory used to store terminal IDs, calibration data, and learned IR codes. |
+| Term            | Definition                                                                                   |
+| --------------- | -------------------------------------------------------------------------------------------- |
+| IMU             | Inertial Measurement Unit, used to detect wrist and hand motion.                             |
+| IR              | Infrared signal used for device pairing and pointing control.                                |
+| ESP32           | Microcontroller with built-in Wi-Fi and Bluetooth, used in both wristband and receiver unit. |
+| LCD             | Liquid Crystal Display showing device and command status.                                    |
+| Haptic Feedback | Vibration feedback provided to the user for confirmation.                                    |
 
+---
 
-**5.2 Functionality**
+5.2 Functionality
 
-| ID | Description (Measurable Requirement) | Verification Method |
-|----|--------------------------------------|----------------------|
-| **SRS-01 (IR Detection and Response)** | When the controller emits an IR selection signal, the hit terminal shall detect and report its ID to the controller within **≤ 150 ms**. | Use a logic analyzer to record the IR trigger and UDP report timestamps; across 50 trials, 95 % ≤ 150 ms. |
-| **SRS-02 (Selection Confirmation)** | After receiving a hit report, the controller shall send a confirmation command within **≤ 50 ms**; the selected terminal shall flash its LED twice within **≤ 200 ms**. | Capture packet time and LED signal waveform; delay ≤ 200 ms. |
-| **SRS-03 (Selection Accuracy)** | Under indoor lighting ≤ 800 lx and LOS conditions, for 50 selection attempts per terminal: **false-selection ≤ 1 %**, **miss rate ≤ 1 %**. | Fix three terminals ≥ 40° apart or ≥ 0.5 m apart; compare target vs. actual IDs. |
-| **SRS-04 (IMU Data Acquisition and Control Generation)** | The IMU shall sample at **≥ 100 Hz** and update control values every **≤ 20 ms**. Under static conditions, output jitter (σ) ≤ 3 % full scale. | Log control values for 60 s and analyze update period and σ. |
-| **SRS-05 (Control Command Transmission and Execution)** | Upon receiving a new IMU control value, the controller shall send a UDP command within **≤ 50 ms**; the terminal shall update its PWM within **≤ 120 ms**. End-to-end 95th ≤ 180 ms. | Use serial logs and oscilloscope to measure timing differences across 100 trials. |
-| **SRS-06 (Exclusive Response)** | Only the selected terminal shall execute LED/PWM commands; non-selected terminals must show no GPIO changes. | Monitor all terminals simultaneously; 20 command sets → 0 false responses. |
-| **SRS-07 (UDP Reliability and Retry)** | If no ACK is received within 50 ms, the controller shall retry ≤ 3 times; if all fail, log an error and notify the user. Under normal conditions, command failure ≤ 0.5 % per hour. | Test under normal and packet-loss scenarios for 1 hour; record retry counts and failures. |
-| **SRS-08 (Data Storage and Recovery)** | After calibration or IR learning, data shall be saved to Flash within **≤ 200 ms**. After power loss, the system shall restore control capability within **≤ 5 s**. | Perform three power-cycle tests and verify data integrity and recovery time. |
+| ID     | Description (Measurable Requirement)                                                                   | Verification Method                                                             |
+| ------ | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------- |
+| HRS-01 | The IMU sensor shall detect wrist rotation and acceleration with an accuracy of ±10%.                 | Verify through calibration and comparison with known angles.                    |
+| HRS-02 | The IR transmitter shall emit a signal detectable by receivers within 2 m in normal lighting.          | Measure IR detection distance and angle using oscilloscope or IR sensor output. |
+| HRS-03 | The ESP32 shall process gesture inputs and send control signals with latency <200 ms.                 | Measure command processing delay using timestamps or GPIO toggles.              |
+| HRS-04 | The vibration motor shall generate a feedback pulse of 200 ± 50 ms duration after each valid command. | Measure motor activation time with oscilloscope or stopwatch.                   |
+| HRS-05 | The LCD display shall update device and command information within 200 ms of command recognition.      | Observe update speed using timestamped logs or slow-motion video.               |
+| HRS-06 | The receiver ESP32 shall control all four output devices independently without interference.           | Test each device's response and confirm no cross-triggering among outputs.      |
 
 ### 6. Hardware Requirements Specification (HRS)
 
-The hardware is designed to ensure that infrared (IR) selection, IMU-based control, and terminal response meet all corresponding software requirements.
+The hardware system shall:
+
+1. Accurately detect wrist and hand motion using the IMU sensor.
+2. Transmit and receive infrared signals reliably for device pairing and pointing control.
+3. Process gesture data and communication tasks using the ESP32 microcontroller.
+4. Provide user feedback through a vibration motor and LCD display.
+5. Control four different output devices (fan, light, air conditioner demo screen, music player) through a single ESP32 receiver board.
+6. Maintain stable wireless communication and power operation within a 2 m indoor range.
 
 **6.1 Definitions, Abbreviations**
 
-| Term | Definition |
-|------|-------------|
-| **IR (Infrared)** | Electromagnetic radiation in the 850–950 nm range (typically 940 nm) used for terminal selection and control. |
-| **Carrier** | The modulated carrier frequency for IR transmission, nominally **38 kHz ± 1 kHz**. |
-| **NEC / RC5 / RC6** | Common IR modulation protocols; this project uses a simplified pulse-distance modulation based on NEC. |
-| **LOS (Line-of-Sight)** | Direct, unobstructed optical path between the controller’s IR LED and the terminal’s IR receiver. |
-| **FOV (Field of View)** | The angular range within which the IR receiver can reliably detect incoming IR signals. |
-| **IMU (Inertial Measurement Unit)** | Sensor module containing a 3-axis accelerometer and gyroscope used to generate dynamic control inputs (e.g., PWM level). |
-| **LEDC / PWM** | ESP32 hardware PWM controller used for motor control signal generation. |
-| **RMT (Remote Control Peripheral)** | ESP32 peripheral used for precise generation of the 38 kHz carrier waveform. |
-| **EEPROM / Flash** | Non-volatile memory used to store terminal IDs, calibration constants, and learned IR patterns. |
-| **ACK** | A short acknowledgment signal sent by a terminal after receiving a valid command. |
+Here, you will define any special terms, acronyms, or abbreviations you plan to use for hardware
 
+| Term  | Definition                                                              |
+| ----- | ----------------------------------------------------------------------- |
+| IMU   | Inertial Measurement Unit for detecting motion and gesture orientation. |
+| IR    | Infrared signal used for device pairing and pointing control.           |
+| ESP32 | Main processing microcontroller handling communication and logic.       |
+| LCD   | Liquid Crystal Display for showing current device and command status.   |
+| PWM   | Pulse Width Modulation used to control motor speed or LED brightness.   |
 
 **6.2 Functionality**
 
-| ID | Description |
-|----|-------------|
-| **HRS-01 (IR Selection and Detection)** | The controller shall transmit modulated IR bursts at **38 kHz ± 1 kHz**, and each terminal shall detect and decode these bursts using a demodulating receiver (e.g., TSOP38238). A valid hit shall be recognized and reported to the controller within **150 ms**. |
-| **HRS-02 (IR Coverage and Range)** | The IR link shall maintain reliable operation at **3 m ±25° horizontal FOV** and achieve a minimum effective range of **8 m LOS** under standard indoor lighting (≤ 800 lx). |
-| **HRS-03 (IR Pulse Accuracy)** | The generated IR pulses shall have a carrier accuracy of **38 kHz ± 1 kHz** and a pulse-width deviation ≤ **±5 %** relative to the nominal pattern. |
-| **HRS-04 (IMU Sampling and Interface)** | The IMU module shall output 3-axis acceleration and angular velocity data at **≥ 100 Hz**, communicating with the controller via **I²C** (400 kHz bus) with data latency ≤ **10 ms**. |
-| **HRS-05 (PWM Output Hardware)** | Each terminal shall generate motor control signals using the ESP32 LEDC peripheral at **20 kHz ± 0.5 kHz**, with duty-cycle linearity error ≤ **±5 %FS** over 0–100 %. |
-| **HRS-06 (Power and Protection)** | All boards shall operate from a regulated **5 V ± 5 %** supply; the IR LED driver shall limit continuous current to **≤ 100 mA** and include reverse-polarity and over-current protection. |
-| **HRS-07 (Non-Volatile Data Retention)** | Terminal IDs, IMU calibration data, and learned IR codes shall be stored in on-board Flash memory and retain integrity for **≥ 100 power cycles** or **1 year** without power. |
+|                                                | Description                                                                                                                                                                                                                                                 |
+| ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **HRS-01 (IR Selection and Detection)**  | The controller shall transmit modulated IR bursts at 38 kHz ± 1 kHz, and each terminal shall detect and decode these bursts using a demodulating receiver (e.g., TSOP38238). A valid hit shall be recognized and reported to the controller within 150 ms. |
+| **HRS-02 (IR Coverage and Range)**       | The IR link shall maintain reliable operation at 3 m ±25° horizontal FOV** and achieve a minimum effective range of 8 m LOS under standard indoor lighting (≤ 800 lx).                                                                                   |
+| **HRS-03 (IR Pulse Accuracy)**           | The generated IR pulses shall have a carrier accuracy of 38 kHz ± 1 kHz and a pulse-width deviation ≤ ±5 % relative to the nominal pattern.                                                                                                              |
+| **HRS-04 (IMU Sampling and Interface)**  | The IMU module shall output 3-axis acceleration and angular velocity data at ≥ 100 Hz, communicating with the controller via I²C (400 kHz bus) with data latency ≤ 10 ms.                                                                                |
+| **HRS-05 (PWM Output Hardware)**         | Each terminal shall generate motor control signals using the ESP32 LEDC peripheral at 20 kHz ± 0.5 kHz, with duty-cycle linearity error ≤ ±5 %FS over 0–100 %.                                                                                          |
+| **HRS-06 (Power and Protection)**        | All boards shall operate from a regulated 5 V ± 5 % supply; the IR LED driver shall limit continuous current to ≤ 100 mA and include reverse-polarity and over-current protection.                                                                        |
+| **HRS-07 (Non-Volatile Data Retention)** | Terminal IDs, IMU calibration data, and learned IR codes shall be stored in on-board Flash memory and retain integrity for ≥ 100 power cycles or 1 year without power.                                                                                     |
 
 ### 7. Bill of Materials (BOM)
 
