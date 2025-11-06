@@ -46,7 +46,7 @@ Draft:
 ![bd](./image/README/089630a66a3f36d4d77707294519bcd7.jpg)
 
 Block Diagram:
-![1761426687986](image/README/1761426687986.png)
+![BD](./image/README/BD.png)
 
 ### 4. Design Sketches
 
@@ -96,9 +96,8 @@ The hardware system shall:
 1. Accurately detect wrist and hand motion using the IMU sensor.
 2. Transmit and receive infrared signals reliably for device pairing and pointing control.
 3. Process gesture data and communication tasks using the ESP32 microcontroller.
-4. Provide user feedback through a vibration motor and LCD display.
-5. Control four different output devices (fan, light, air conditioner demo screen, music player) through a single ESP32 receiver board.
-6. Maintain stable wireless communication and power operation within a 2 m indoor range.
+4. Control four different output devices (fan, light, air conditioner demo screen, music player) through a single ESP32 receiver board.
+5. Maintain stable wireless communication and power operation within a 3 m indoor range.
 
 **6.1 Definitions, Abbreviations**
 
@@ -114,15 +113,15 @@ Here, you will define any special terms, acronyms, or abbreviations you plan to 
 
 **6.2 Functionality**
 
-|                                                | Description                                                                                                                                                                                                                                                 |
-| ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **HRS-01 (IR Selection and Detection)**  | The controller shall transmit modulated IR bursts at 38 kHz ± 1 kHz, and each terminal shall detect and decode these bursts using a demodulating receiver (e.g., TSOP38238). A valid hit shall be recognized and reported to the controller within 150 ms. |
-| **HRS-02 (IR Coverage and Range)**       | The IR link shall maintain reliable operation at 3 m ±25° horizontal FOV** and achieve a minimum effective range of 8 m LOS under standard indoor lighting (≤ 800 lx).                                                                                   |
-| **HRS-03 (IR Pulse Accuracy)**           | The generated IR pulses shall have a carrier accuracy of 38 kHz ± 1 kHz and a pulse-width deviation ≤ ±5 % relative to the nominal pattern.                                                                                                              |
-| **HRS-04 (IMU Sampling and Interface)**  | The IMU module shall output 3-axis acceleration and angular velocity data at ≥ 100 Hz, communicating with the controller via I²C (400 kHz bus) with data latency ≤ 10 ms.                                                                                |
-| **HRS-05 (PWM Output Hardware)**         | Each terminal shall generate motor control signals using the ESP32 LEDC peripheral at 20 kHz ± 0.5 kHz, with duty-cycle linearity error ≤ ±5 %FS over 0–100 %.                                                                                          |
-| **HRS-06 (Power and Protection)**        | All boards shall operate from a regulated 5 V ± 5 % supply; the IR LED driver shall limit continuous current to ≤ 100 mA and include reverse-polarity and over-current protection.                                                                        |
-| **HRS-07 (Non-Volatile Data Retention)** | Terminal IDs, IMU calibration data, and learned IR codes shall be stored in on-board Flash memory and retain integrity for ≥ 100 power cycles or 1 year without power.                                                                                     |
+|                                                | Description|                                                                     Verification Method                                                                                                   |
+| ---------------------------------------------- |--------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **HRS-01 (IR Selection and Detection)**  | The controller shall transmit modulated IR bursts at 38 kHz. A valid hit shall be recognized and reported to the controller within. |Point to different terminal many times to veritify the selection. |
+| **HRS-02 (IR Coverage and Range)**       | The IR link shall maintain reliable operation at 3 m ±45 degree in front of receiver under standard indoor lighting                                                                                  |Point at the same terminal in different angle many time and show the result. |
+
+| **HRS-03 (IMU Sampling and Interface)**  | The IMU module shall output 3-axis acceleration and angular velocity data at ≥ 100 Hz, communicating with the controller via I²C (400 kHz bus).                                                                               |Use UART to print the raw data from IMU and check if it is stable|
+| **HRS-04 (PWM Output Hardware)**         | FAN terminal's ESP32 shall generate motor control signals with different Freq and duty cycle                                                                               |Change the command and see the output PWM using Oscilloscope|
+| **HRS-05 (Power and Protection)**        | All boards shall operate from a regulated 5 V ± 5 % supply; the IR LED driver shall limit continuous current to ≤ 200 mA and include reverse-polarity and over-current protection.                                                                        |Use DMM to test all connection, voltage and current.|
+
 
 ### 7. Bill of Materials (BOM)
 
@@ -134,11 +133,11 @@ On demo day, we will demonstrate the gesture-controlled infrared wristband in an
 
 The demo will include:
 
-1. Pairing – The user points at an appliance and pairs it via IR.
-2. Control – Gestures like hand opening or wrist lifting trigger corresponding IR commands.
-3. Feedback – The appliance responds (e.g., lamp toggles), and receiver LEDs confirm success.
+1. Pairing – The user points at an terminal(fan, LCD music player, motor) and pairs it via IR.
+2. Control – Gestures like hand opening or wrist lifting recognized by ATMega328PB and output command through ESP32.
+3. Feedback – The appliance responds (e.g., LED brightness change, or motor speed up)
 
-The system will run in a  2 m × 2 m area , powered by batteries or USB. The demonstration highlights  low-latency gesture response ,  accurate direction-based control , and  intuitive, phone-free smart-home interaction .
+The system will run in a at least 3 m × 3 m area , powered by power bank with Power delivery. 
 
 ### 9. Sprint Planning
 
