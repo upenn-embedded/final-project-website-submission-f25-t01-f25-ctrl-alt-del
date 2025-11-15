@@ -162,6 +162,8 @@ During this sprint, we focused on initial subsystem bring-up and early-stage fea
 * Implemented and tested the basic IMU functionality on the ATmega328PB wrist module.
 * Successfully achieved 4-direction gesture detection (up, down, left, right).
 * Verified motion thresholds, filtering logic, and interrupt-based sampling behavior.
+* [Code library](https://github.com/upenn-embedded/final-project-f25-f25-final_project_t1/tree/main/lib)
+
 
 **2. System-Level Code Architecture**
 
