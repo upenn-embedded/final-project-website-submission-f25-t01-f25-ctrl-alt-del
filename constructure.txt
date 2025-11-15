@@ -1,10 +1,10 @@
 GestureWrist_ATmega.X/
-├── nbproject/              # MPLAB 自动生成
-├── Makefile                # MPLAB 自动生成
+├── nbproject/              # MPLAB
+├── Makefile                # MPLAB
 └── src/
     ├── main.c
     ├── system.h
-    ├── system.c            # 时钟、Timer、全局初始化
+    ├── system.c           
 
     ├── drivers/
     │   ├── drv_uart.h
@@ -25,16 +25,16 @@ GestureWrist_ATmega.X/
     │   ├── gesture.c
     │   ├── device_select.h
     │   ├── device_select.c
-    │   ├── command.h       # 手势 → 高层命令
+    │   ├── command.h       
     │   ├── command.c
-    │   ├── esp_link.h      # 和腕带 ESP32 串口协议
+    │   ├── esp_link.h      #ESP32
     │   ├── esp_link.c
-    │   ├── ir_tx.h         # IR 发射（配对）
+    │   ├── ir_tx.h         # IR
     │   ├── ir_tx.c
     │   ├── lcd_ui.h
     │   ├── lcd_ui.c
-    │   ├── haptic.h        # 震动电机
+    │   ├── haptic.h        
     │   └── haptic.c
 
     └── config/
-        └── app_config.h    # 系统常量（采样周期、波特率等）
+        └── app_config.h

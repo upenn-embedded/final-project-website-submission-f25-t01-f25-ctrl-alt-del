@@ -65,7 +65,6 @@ The system shall:
 5. Provide real-time visual feedback on the wrist LCD and haptic feedback via the vibration motor.
 6. Update controlled devices'  states (fan, light, air conditioner demo screen, music player) accordingly.
 
-
 **5.1 Definitions, Abbreviation**
 
 | Term            | Definition                                                                                   |
@@ -80,14 +79,14 @@ The system shall:
 
 5.2 Functionality
 
-| ID     | Description (Measurable Requirement)                                                                   | Verification Method                                                             |
-| ------ | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------- |
-| HRS-01 | The IMU sensor shall detect wrist rotation and acceleration with an accuracy of ±10%.                 | Use usrt output wrist ratation and compare with real movitation         |
-| HRS-02 | The IR transmitter shall emit a signal detectable by receivers within 3 m in normal lighting.          | Measure IR detection distance and angle using IR receiver output. |
-| HRS-03 | The ESP32 shall process gesture inputs and send control signals with latency <500 ms.                 | Control buzzer to beep when gesture happens, using stopwatch to record respond time             |
-| HRS-04 | The vibration motor shall generate a feedback pulse of 200 ± 50 ms duration after each pairing success. | Measure motor activation time with stopwatch.                   |
-| HRS-05 | The LCD display shall update device and command information within 1s of command recognition.      | Observe update speed using timestamped logs or slow-motion video.               |
-| HRS-06 | The receiver ESP32 shall control all four output devices.          | Test each device's response      |
+| ID     | Description (Measurable Requirement)                                                                     | Verification Method                                                                 |
+| ------ | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| HRS-01 | The IMU sensor shall detect wrist rotation and acceleration with an accuracy of ±10%.                   | Use usrt output wrist ratation and compare with real movitation                     |
+| HRS-02 | The IR transmitter shall emit a signal detectable by receivers within 3 m in normal lighting.            | Measure IR detection distance and angle using IR receiver output.                   |
+| HRS-03 | The ESP32 shall process gesture inputs and send control signals with latency <500 ms.                   | Control buzzer to beep when gesture happens, using stopwatch to record respond time |
+| HRS-04 | The vibration motor shall generate a feedback pulse of 200 ± 50 ms duration after each pairing success. | Measure motor activation time with stopwatch.                                       |
+| HRS-05 | The LCD display shall update device and command information within 1s of command recognition.            | Observe update speed using timestamped logs or slow-motion video.                   |
+| HRS-06 | The receiver ESP32 shall control all four output devices.                                                | Test each device's response                                                         |
 
 ### 6. Hardware Requirements Specification (HRS)
 
@@ -115,15 +114,13 @@ Here, you will define any special terms, acronyms, or abbreviations you plan to 
 
 ### 6. Hardware Requirements Specification (HRS)
 
-| ID | Description | Verification Method |
-|----|--------------|---------------------|
-| **HRS-01 (IR Selection and Detection)** | The controller shall transmit modulated IR bursts at 38 kHz. A valid hit shall be recognized and reported to the controller within 50 ms. | Point to different terminals many times to verify the selection. |
-| **HRS-02 (IR Coverage and Range)** | The IR link shall maintain reliable operation at 3 m ± 45° in front of the receiver under standard indoor lighting. | Point at the same terminal from different angles many times and show the result. |
-| **HRS-03 (IMU Sampling and Interface)** | The IMU module shall output 3-axis acceleration and angular-velocity data at ≥ 100 Hz, communicating with the controller via I²C (400 kHz). | Use UART to print the raw data from the IMU and check if it is stable. |
-| **HRS-04 (PWM Output Hardware)** | The fan terminal’s ESP32 shall generate motor-control signals with different frequencies and duty cycles. | Change the command and observe the output PWM using an oscilloscope. |
-| **HRS-05 (Power and Protection)** | All boards shall operate from a regulated 5 V ± 5 % supply; the IR-LED driver shall limit continuous current to ≤ 200 mA and include reverse-polarity and over-current protection. | Use a DMM to test all connections, voltage, and current. |
-
-
+| ID                                            | Description                                                                                                                                                                          | Verification Method                                                              |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------- |
+| **HRS-01 (IR Selection and Detection)** | The controller shall transmit modulated IR bursts at 38 kHz. A valid hit shall be recognized and reported to the controller within 50 ms.                                            | Point to different terminals many times to verify the selection.                 |
+| **HRS-02 (IR Coverage and Range)**      | The IR link shall maintain reliable operation at 3 m ± 45° in front of the receiver under standard indoor lighting.                                                                | Point at the same terminal from different angles many times and show the result. |
+| **HRS-03 (IMU Sampling and Interface)** | The IMU module shall output 3-axis acceleration and angular-velocity data at ≥ 100 Hz, communicating with the controller via I²C (400 kHz).                                        | Use UART to print the raw data from the IMU and check if it is stable.           |
+| **HRS-04 (PWM Output Hardware)**        | The fan terminal’s ESP32 shall generate motor-control signals with different frequencies and duty cycles.                                                                           | Change the command and observe the output PWM using an oscilloscope.             |
+| **HRS-05 (Power and Protection)**       | All boards shall operate from a regulated 5 V ± 5 % supply; the IR-LED driver shall limit continuous current to ≤ 200 mA and include reverse-polarity and over-current protection. | Use a DMM to test all connections, voltage, and current.                         |
 
 ### 7. Bill of Materials (BOM)
 
@@ -139,7 +136,7 @@ The demo will include:
 2. Control – Gestures like hand opening or wrist lifting recognized by ATMega328PB and output command through ESP32.
 3. Feedback – The appliance responds (e.g., LED brightness change, or motor speed up)
 
-The system will run in a at least 3 m × 3 m area , powered by power bank with Power delivery. 
+The system will run in a at least 3 m × 3 m area , powered by power bank with Power delivery.
 
 ### 9. Sprint Planning
 
@@ -158,9 +155,115 @@ The system will run in a at least 3 m × 3 m area , powered by power bank with P
 
 ### Last week's progress
 
+During this sprint, we focused on initial subsystem bring-up and early-stage feature development. Our key accomplishments include:
+
+**1. IMU Gesture Recognition**
+
+* Implemented and tested the basic IMU functionality on the ATmega328PB wrist module.
+* Successfully achieved 4-direction gesture detection (up, down, left, right).
+* Verified motion thresholds, filtering logic, and interrupt-based sampling behavior.
+
+**2. System-Level Code Architecture**
+
+Completed the  overall firmware architecture design , including module-level separation for:
+
+* Wristband IMU processing
+* Device selection interface on TFT LCD
+* IR transmission module
+* ESP32 ↔ ATmega communication
+
+Created scaffolding files for easier future integration.
+
+**3. IR Transmitter Driver Circuit**
+
+* Built and tested the current-amplifying transistor stage for driving high-power IR LEDs.
+* Verified correct switching behavior and validated expected current through IR LED during bench testing using multimeter.
+
+**4. Proof of Work**
+
+* Firmware commits pushed to GitHub (IMU module, project structure setup).
+
+  ![1763167525328](image/README/1763167525328.png)
+
+  ![1763167474857](image/README/1763167474857.png)
+* Breadboard test photos for the IR driver stage.
+* Videos demonstrating basic IMU directional detection.
+
+  https://drive.google.com/file/d/1PLXOXZthyoQXSDA5x4BB6909TSStif7H/view?usp=drive_link
+
 ### Current state of project
 
+The project is currently in the  early preparation and subsystem prototyping stage :
+
+**Hardware Procurement**
+
+* Most components (flex sensors, IR receiver modules, IMU backup, vibration motor replacements, etc.) have been ordered and are expected to arrive next week.
+* Not all hardware is on hand yet, so full-system assembly has not begun.
+
+**System Progress**
+
+* High-level architecture is complete and validated by the team.
+* Subsystems currently under development:
+  * Gesture recognition pipeline
+  * IR driver circuit
+  * Display interface (pending)
+  * Flex sensor processing (pending)
+  * ATmega ↔ ESP32 communication (pending)
+
+**Status Summary**
+
+The project remains in the early phase, but successful completion of IMU + IR subsystem bring-up gives us a strong foundation. These early modules will significantly reduce integration difficulty in later stages.
+
 ### Next week's plan
+
+Next week will focus on  **hardware validation ,  module expansion , and  multi-component integration .**
+
+**3.1 Hardware Bring-Up (Estimated 4 hours)**
+
+| Task                                              | Member                  | Definition of Done                                               |
+| ------------------------------------------------- | ----------------------- | ---------------------------------------------------------------- |
+| Test IR pairing modules                           | Jingyi Huang            | IR transmitter recognized by receiver; stable decoding confirmed |
+| Test wristband IMU, vibration motor, flex sensors | Sirui Wu ,Shunyao Jiang | Sensor readings verified on serial output; thresholds calibrated |
+
+---
+
+**3.2 Module Development (Estimated 6 hours)**
+
+**Flex Sensor Module**
+
+* **Members** : Sirui Wu, Shunyao Jiang
+* **Done When** :
+* Flex sensor ADC readings are stable
+* Basic gesture states classified
+* Demo plots or printed readings captured
+
+**Wrist Display UI**
+
+* **Members** : Shunyao Jiang, Jingyi Huang
+* **Done When** :
+* Device selection UI shows icons or simple graphics
+* UI can switch screens based on gestures
+
+**ESP32 ↔ ATmega328PB Communication**
+
+* **Members** : Sirui Wu, Shunyao Jiang, Jingyi Huang
+* **Done When** :
+* Basic UART communication established
+* Command packet format defined
+* Successful command transfer demo
+
+**IR Transmitter Circuit Assembly**
+
+* **Member** : Jingyi Huang
+* **Done When** :
+* Final IR driver circuit soldered/built
+* Measured LED peak current matches design
+
+---
+
+## **Summary**
+
+We have completed the early-stage gesture recognition and IR hardware verification. Next week aims to integrate newly arrived hardware, expand sensing and UI modules, and begin cross-microcontroller communication. Progress is on track with our overall project goals.
 
 ## Sprint Review #2
 
