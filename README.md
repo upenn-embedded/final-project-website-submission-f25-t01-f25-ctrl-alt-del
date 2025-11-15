@@ -164,7 +164,6 @@ During this sprint, we focused on initial subsystem bring-up and early-stage fea
 * Verified motion thresholds, filtering logic, and interrupt-based sampling behavior.
 * [Code library](https://github.com/upenn-embedded/final-project-f25-f25-final_project_t1/tree/main/lib)
 
-
 **2. System-Level Code Architecture**
 
 Completed the  overall firmware architecture design , including module-level separation for:
@@ -192,6 +191,10 @@ Created scaffolding files for easier future integration.
 * Videos demonstrating basic IMU directional detection.
 
   https://drive.google.com/file/d/1PLXOXZthyoQXSDA5x4BB6909TSStif7H/view?usp=drive_link
+
+  ![1763172100559](image/README/1763172100559.png)
+
+  We can see from simulation that the input current is amplified to 369mA, which met the requirement of the IR emitter.
 
 ### Current state of project
 
