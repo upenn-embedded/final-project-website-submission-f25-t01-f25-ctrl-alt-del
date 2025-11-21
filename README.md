@@ -274,6 +274,16 @@ We have completed the early-stage gesture recognition and IR hardware verificati
 
 ### Last week's progress
 
+1.Flex sensor circuit design
+
+The resistance of the sensor was measured to be about 30 kΩ when flat and around 80 kΩ at a 180° bend. Based on these values, a voltage-divider using the flex sensor and a 47 kΩ resistor was designed to convert resistance changes into a voltage difference (approximately 3.0 V flat and 1.9 V bent with a 5 V supply). An LM358 comparator with a 2.5 V reference was then added so that the circuit outputs is about 3.85V when flat and almost 0V when bent 180°
+
+![1763689196172](image/README/1763689196172.png)
+
+2.IR current amplifier 
+
+We designed a low-side switch so the ATmega328PB can safely drive a high-current IR LED. The LED is placed in series with a 47 Ω, 0.5 W resistor between +5 V and the drain of an N-channel logic-level MOSFET; the MOSFET source goes to ground. An ATmega328PB digital I/O pin controls the MOSFET gate through a ~100 Ω resistor, with a 100 kΩ pull-down from gate to ground. When the pin is HIGH (5 V), the MOSFET turns on and about 60–70 mA flows through the LED; when the pin is LOW, the MOSFET turns off and the LED is off. This way the MCU only drives the MOSFET gate and never has to source the large LED current directly.![1763691914721](image/README/1763691914721.png)
+
 ### Current state of project
 
 ### Next week's plan
@@ -304,8 +314,7 @@ If you’ve never made a GitHub pages website before, you can follow this webpag
 
 [Insert final project video here]
 
-* The video must demonstrate your key functionality.
-* The video must be 5 minutes or less.
+* The video must demonstrate your key functionality.The video must be 5 minutes or less.
 * Ensure your video link is accessible to the teaching team. Unlisted YouTube videos or Google Drive uploads with SEAS account access work well.
 * Points will be removed if the audio quality is poor - say, if you filmed your video in a noisy electrical engineering lab.
 
