@@ -75,18 +75,18 @@ The system shall:
 | LCD             | Liquid Crystal Display showing device and command status.                                    |
 | Haptic Feedback | Vibration feedback provided to the user for confirmation.                                    |
 
----
+
 
 5.2 Functionality
 
 | ID     | Description (Measurable Requirement)                                                                     | Verification Method                                                                 |
 | ------ | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| HRS-01 | The IMU sensor shall detect wrist rotation and acceleration with an accuracy of ±10%.                   | Use usrt output wrist ratation and compare with real movitation                     |
-| HRS-02 | The IR transmitter shall emit a signal detectable by receivers within 3 m in normal lighting.            | Measure IR detection distance and angle using IR receiver output.                   |
-| HRS-03 | The ESP32 shall process gesture inputs and send control signals with latency <500 ms.                   | Control buzzer to beep when gesture happens, using stopwatch to record respond time |
-| HRS-04 | The vibration motor shall generate a feedback pulse of 200 ± 50 ms duration after each pairing success. | Measure motor activation time with stopwatch.                                       |
-| HRS-05 | The LCD display shall update device and command information within 1s of command recognition.            | Observe update speed using timestamped logs or slow-motion video.                   |
-| HRS-06 | The receiver ESP32 shall control all four output devices.                                                | Test each device's response                                                         |
+| SRS-01 | The IMU sensor shall detect wrist rotation and acceleration with an accuracy of ±10%.                   | Use usrt output wrist ratation and compare with real movitation                     |
+| SRS-02 | The IR transmitter shall emit a signal detectable by receivers within 3 m in normal lighting.            | Measure IR detection distance and angle using IR receiver output.                   |
+| SRS-03 | The ESP32 shall process gesture inputs and send control signals with latency <500 ms.                   | Control buzzer to beep when gesture happens, using stopwatch to record respond time |
+| SRS-04 | The vibration motor shall generate a feedback pulse of 200 ± 50 ms duration after each pairing success. | Measure motor activation time with stopwatch.                                       |
+| SRS-05 | The LCD display shall update device and command information within 1s of command recognition.            | Observe update speed using timestamped logs or slow-motion video.                   |
+| SRS-06 | The receiver ESP32 shall control all four output devices.                                                | Test each device's response                                                         |
 
 ### 6. Hardware Requirements Specification (HRS)
 
@@ -236,7 +236,7 @@ Next week will focus on  **hardware validation ,  module expansion , and  multi-
 
 **Flex Sensor Module**
 
-* **Members** : Sirui Wu, Shunyao Jiang
+* **Members** : Shunyao Jiang, Jingyi Huang, Sirui Wu
 * **Done When** :
 * Flex sensor ADC readings are stable
 * Basic gesture states classified
@@ -251,7 +251,7 @@ Next week will focus on  **hardware validation ,  module expansion , and  multi-
 
 **ESP32 ↔ ATmega328PB Communication**
 
-* **Members** : Sirui Wu, Shunyao Jiang, Jingyi Huang
+* **Members** : Sirui Wu, Shunyao Jiang
 * **Done When** :
 * Basic UART communication established
 * Command packet format defined
@@ -282,11 +282,90 @@ The resistance of the sensor was measured to be about 30 kΩ when flat and aroun
 
 2.IR current amplifier 
 
-We designed a low-side switch so the ATmega328PB can safely drive a high-current IR LED. The LED is placed in series with a 47 Ω, 0.5 W resistor between +5 V and the drain of an N-channel logic-level MOSFET; the MOSFET source goes to ground. An ATmega328PB digital I/O pin controls the MOSFET gate through a ~100 Ω resistor, with a 100 kΩ pull-down from gate to ground. When the pin is HIGH (5 V), the MOSFET turns on and about 60–70 mA flows through the LED; when the pin is LOW, the MOSFET turns off and the LED is off. This way the MCU only drives the MOSFET gate and never has to source the large LED current directly.![1763691914721](image/README/1763691914721.png)
+We designed a low-side switch so the ATmega328PB can safely drive a high-current IR LED. The LED is placed in series with a 47 Ω, 0.5 W resistor between +5 V and the drain of an N-channel logic-level MOSFET; the MOSFET source goes to ground. An ATmega328PB digital I/O pin controls the MOSFET gate through a ~100 Ω resistor, with a 100 kΩ pull-down from gate to ground. When the pin is HIGH (5 V), the MOSFET turns on and about 60–70 mA flows through the LED; when the pin is LOW, the MOSFET turns off and the LED is off. This way the MCU only drives the MOSFET gate and never has to source the large LED current directly.![1763691914721](image/README/1763691914721.png)  
+
+3.Communication between ATmega328PB and wrist ESP32.
+   
+We established a reliable UART communication link between the ATmega328PB and the ESP32. The ATmega uses UART0 (PD0/PD1) at a fixed baud rate (9600) to send gesture characters such as ‘U’, ‘D’, ‘L’, and ‘R’, while a simple voltage divider (2.2 KΩ + 3.3 KΩ) safely converts the ATmega’s 5V TX signal down to the ESP32’s 3.3V level. On the ESP32-S2, UART1 (GPIO43/44) receives these bytes and forwards them either to the USB serial output. During debugging, we verified the ATmega's UART waveform and system clock on an logic analyzer to ensure stable timing. In the test setup, the system successfully delivers IMU-based gesture data from the ATmega through UART to the ESP32, and output to serial moniter in 115200 buad rate, providing a robust data pathway for controlling multiple terminals.
+
+
 
 ### Current state of project
 
 ### Next week's plan
+
+Next week’s sprint will focus on cross-microcontroller communication, sensor integration, and initial terminal-side control, moving the project from subsystem prototyping toward a fully functional end-to-end pipeline.
+
+1. **Flex Sensor Processing Module**
+
+The flex sensor circuit and amplifier are complete, but the firmware portion is not yet implemented.
+
+Next week's tasks include:
+
+- Writing ADC sampling code on the ATmega to read the flex sensor voltage divider.
+
+- Tuning thresholds based on Flex sonsor comparator output.
+
+- Classifying close/open states and integrating results with IMU gesture packets.
+
+- Logging output over UART for debugging.
+
+**Done when:**
+Stable flex-state classification (“CLOSE” / “OPEN”) is embedded in the wristband’s outgoing data stream.
+
+2. **Full Communication Pipeline Integration**
+
+We will complete the full data path from the wristband to appliance devices:
+```c
+Gesture → UART → Wrist-ESP32 → WiFi → Appliance-ESP32 → Device Reaction → Feedback
+```
+Planned work includes:
+
+- Implementing real (non-simulated) PAIR and PAIR_OK communication between the two ESP32 modules.
+- Integrating gesture outputs and flex-sensor state into a unified data packet transmitted from the ATmega328PB.
+- Ensuring reliable UART reception on the wrist ESP32 and forwarding packets over WiFi to the appliance.
+- Adding confirmation messages ("Pair_OK") and feedback loops back to the wristband.
+
+**Done when:**
+Wristband input produces a visible reaction on the appliance ESP32 and feedback is received over WiFi.
+
+3. **Wristband Hardware Integration**
+   
+With most hardware now acquired, we will begin assembling the wristband prototype:
+
+- Mechanical integration of IMU, flex sensor, ATmega328PB, ESP32, IR transmitter, and vibration motor.
+
+- Cleaning up internal wiring and verifying reliable power distribution.
+
+- Adding vibration-motor feedback triggered on successful PAIR_OK.
+
+**Done when:**
+A self-contained wristband prototype can operate all sensors and communication modules simultaneously.
+
+4. **Appliance-Side Control Logic**
+
+The appliance ESP32 will begin supporting multiple devices:
+
+- Implement the command dispatcher for fan, LED strip, speaker, and servo.
+
+- Add PWM control for the fan device and verify output with an oscilloscope.
+
+- Add initial LED/servo control functions.
+
+- Support device ID–based routing of commands.
+
+**Done when:**
+Each device responds correctly to its corresponding command from the wristband.
+
+5. **System-Level Testing (HRS + SRS)**
+
+| Requirement ID | Description                                          | Verification Method                                               |
+|----------------|------------------------------------------------------|-------------------------------------------------------------------|
+| **HRS-03**     | IMU outputs stable 3-axis accel/gyro at ≥20 Hz      | Validate IMU sampling stability via UART logs during motion tests |
+| **SRS-03**     | Gesture→device response latency < 500 ms             | Measure total command latency using stopwatch and buzzer feedback |
+| **SRS-06**     | Appliance ESP32 controls all four output devices     | Send commands and confirm each device reacts correctly            |
+| **SRS-05**     | LCD updates device/command info within 1 second      | Measure UI update time using timestamped logs or slow-motion video |
+
 
 ## MVP Demo
 
