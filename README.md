@@ -262,11 +262,12 @@ Next week will focus on  **hardware validation ,  module expansion , and  multi-
 * Final IR driver circuit soldered/built
 * Measured LED peak current matches design
 
----
 
-## **Summary**
+### **Summary**
 
 We have completed the early-stage gesture recognition and IR hardware verification. Next week aims to integrate newly arrived hardware, expand sensing and UI modules, and begin cross-microcontroller communication. Progress is on track with our overall project goals.
+
+---
 
 ## Sprint Review #2
 
@@ -289,7 +290,9 @@ We designed a low-side switch so the ATmega328PB can safely drive a high-current
 3.Communication between ATmega328PB and wrist ESP32.
 
 We established a reliable UART communication link between the ATmega328PB and the ESP32. The ATmega uses UART0 (PD0/PD1) at a fixed baud rate (9600) to send gesture characters such as ‘U’, ‘D’, ‘L’, and ‘R’, while a simple voltage divider (2.2 KΩ + 3.3 KΩ) safely converts the ATmega’s 5V TX signal down to the ESP32’s 3.3V level. On the ESP32-S2, UART1 (GPIO43/44) receives these bytes and forwards them either to the USB serial output. During debugging, we verified the ATmega's UART waveform and system clock on an logic analyzer to ensure stable timing. In the test setup, the system successfully delivers IMU-based gesture data from the ATmega through UART to the ESP32, and output to serial moniter in 115200 buad rate, providing a robust data pathway for controlling multiple terminals.
-[UART Gesture Interface](https://github.com/upenn-embedded/final-project-f25-f25-final_project_t1/blob/main/lib/esp32/UART_ges-32.c)
+[UART Gesture Interface at ino](https://github.com/upenn-embedded/final-project-f25-f25-final_project_t1/blob/main/lib/esp32/UART_ges-32.c)
+
+[UART Gesture Interface at MPLAB](https://github.com/upenn-embedded/final-project-f25-f25-final_project_t1/blob/main/lib/ATmega328PB/source/UART_ges-32.c)
 
 4.Communication testing between two ESP32 boards and motor control
 
@@ -323,64 +326,83 @@ Almost all hardware has arrived— only the IR receiver and the music player mod
 
 ### Next week's plan
 
-Next week’s sprint will focus on cross-microcontroller communication, sensor integration, and initial terminal-side control, moving the project from subsystem prototyping toward a fully functional end-to-end pipeline.
+Next week we will shift from isolated subsystem development to **full system integration**, combining gesture sensing, flex sensor processing, UART communication, ESP32 hotspot communication, and appliance-side control.
 
 1. **Flex Sensor Processing Module**
 
-The flex sensor circuit and amplifier are complete, but the firmware portion is not yet implemented.
+**Time:** 4–6 hours
+**Members:** Shunyao Jiang, Jingyi Huang
 
-Next week's tasks include:
+**Tasks**
 
-- Writing ADC sampling code on the ATmega to read the flex sensor voltage divider.
-- Tuning thresholds based on Flex sonsor comparator output.
-- Classifying close/open states and integrating results with IMU gesture packets.
-- Logging output over UART for debugging.
+- Implement ADC sampling for the flex sensor on ATmega328PB.
+
+- Tune comparator threshold and classify bent / straight states.
+
+- Integrate flex-state output into the same data packet as IMU gestures.
 
 **Done when:**
-Stable flex-state classification (“CLOSE” / “OPEN”) is embedded in the wristband’s outgoing data stream.
+Stable flex-state classification (bent / straight) is embedded in the wristband’s outgoing data stream.
 
 2. **Full Communication Pipeline Integration**
 
+**Time:** 6–8 hours
+**Members:** Sirui Wu, Shunyao Jiang
 We will complete the full data path from the wristband to appliance devices:
 
 ```c
 Gesture → UART → Wrist-ESP32 → WiFi → Appliance-ESP32 → Device Reaction → Feedback
 ```
 
-Planned work includes:
+**Tasks**
 
-- Implementing real (non-simulated) PAIR and PAIR_OK communication between the two ESP32 modules.
-- Integrating gesture outputs and flex-sensor state into a unified data packet transmitted from the ATmega328PB.
-- Ensuring reliable UART reception on the wrist ESP32 and forwarding packets over WiFi to the appliance.
-- Adding confirmation messages ("Pair_OK") and feedback loops back to the wristband.
+- Implement real PAIR / PAIR_OK over WiFi (no simulated input).
+
+- Combine IMU + flex sensor state into unified packet.
+
+- Forward packet: ATmega → UART → Wrist ESP32 → WiFi → Appliance.
+
+- Add feedback messages sent back to the wristband.
 
 **Done when:**
-Wristband input produces a visible reaction on the appliance ESP32 and feedback is received over WiFi.
+A gesture or flex action triggers a visible response on the appliance, and feedback is received.
 
 3. **Wristband Hardware Integration**
 
-With most hardware now acquired, we will begin assembling the wristband prototype:
+**Time:** 3–5 hours
+**Members:** Sirui Wu, Jingyi Huang
 
-- Mechanical integration of IMU, flex sensor, ATmega328PB, ESP32, IR transmitter, and vibration motor.
-- Cleaning up internal wiring and verifying reliable power distribution.
-- Adding vibration-motor feedback triggered on successful PAIR_OK.
+**Tasks**
+
+- Assemble IMU, flex sensor, ATmega, ESP32, vibration motor, and IR driver into wristband shell.
+
+- Verify stable internal wiring and power.
+
+- Add vibration feedback for successful pairing.
 
 **Done when:**
 A self-contained wristband prototype can operate all sensors and communication modules simultaneously.
 
 4. **Appliance-Side Control Logic**
 
-The appliance ESP32 will begin supporting multiple devices:
+**Time:** 6–8 hours
+**Members:** Jingyi Huang, Shunyao Jiang, Sirui Wu
 
-- Implement the command dispatcher for fan, LED strip, speaker, and servo.
-- Add PWM control for the fan device and verify output with an oscilloscope.
-- Add initial LED/servo control functions.
-- Support device ID–based routing of commands.
+**Tasks**
+
+- Implement device command dispatcher on appliance ESP32.
+
+- Add PWM (fan), LED strip, servo, and buzzer control.
+
+- Implement command acknowledgements.
 
 **Done when:**
 Each device responds correctly to its corresponding command from the wristband.
 
 5. **System-Level Testing (HRS + SRS)**
+
+**Time:** 5–6 hours
+**Members:** Entire team
 
 | Requirement ID   | Description                                      | Verification Method                                                |
 | ---------------- | ------------------------------------------------ | ------------------------------------------------------------------ |
@@ -388,6 +410,15 @@ Each device responds correctly to its corresponding command from the wristband.
 | **SRS-03** | Gesture→device response latency < 500 ms        | Measure total command latency using stopwatch and buzzer feedback  |
 | **SRS-06** | Appliance ESP32 controls all four output devices | Send commands and confirm each device reacts correctly             |
 | **SRS-05** | LCD updates device/command info within 1 second  | Measure UI update time using timestamped logs or slow-motion video |
+
+### Summary
+
+This week we completed key subsystems: the flex sensor circuit, IR driver, ATmega↔ESP32 UART link, and ESP32-to-ESP32 WiFi communication. All sensing and communication components now work reliably on their own.
+
+Next week we will begin full integration—combining gesture + flex data, implementing real PAIR flow, assembling the wristband hardware, and enabling appliance-side device control. We will also start validating core HRS/SRS items such as IMU stability, gesture-to-device latency, and multi-device response. These steps will move the project toward the first full end-to-end demo.
+
+---
+
 
 ## MVP Demo
 
