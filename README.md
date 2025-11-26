@@ -422,6 +422,56 @@ Next week we will begin full integration—combining gesture + flex data, implem
 
 ## MVP Demo
 
+### block diagram
+![wvpdemo](./image/README/MVP%20demo.png)
+
+In the block diagram, we test amost each hardware. But the IR receiver just arrive today so we use simulate serial command to continue our work.
+
+### hardware and firmware
+
+**IMU**
+In our previous work, we were already able to reliably read “UP,” “DOWN,” “LEFT,” and “RIGHT” gestures from the IMU by measuring and quantizing the accelerations on the X and Y axes, setting appropriate thresholds, and classifying gestures through threshold comparison.
+
+**Flex sensor**
+We have also completed about half of the “CLOSE” and “OPEN” gesture recognition. We have already built the flex-sensor amplification circuit, achieving a rail-to-rail conversion from 3.8 V to 0 V, and we plan to use the ADC to perform the gesture classification in software.
+[flex_sensor_amp](https://drive.google.com/file/d/1_XtqX4PjBiz1Ai4PeFckXTqXbyiMufvI/view?usp=sharing)
+
+**Device:motor fan**
+We use PWM to drive the fan, converting the received commands—such as “UP”—into corresponding PWM changes and outputting them to control the device.
+
+
+**Firmware**：In our earlier work, we had already completed two separate functions: UART communication from the ATmega328PB to the wrist-end ESP32, and Wi-Fi communication between ESP32 devices. Now, we have integrated these two functions to form a complete control chain that handles pairing, gesture recognition, command transmission, command execution, and feedback. This integration allows us to realize the core functionality of our project.
+
+### MVP Demo
+[MVP Demo](https://drive.google.com/file/d/1SKOX1R7A6VJAU_8RTqxNAzLBY7lQUvXT/view?usp=sharing)
+
+**pairing and conmmand**
+
+Wrist side:
+![alt text](./image/README/commandwrist.png)
+
+Device side:
+![cmdd](./image/README/commanddevice.png)
+![cmdd2](./image/README/commanddevice2.png)
+
+### SRS realized
+
+| ID     | Description (Measurable Requirement)                                                                     | Verification Method                         | realization              |
+| ------ | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ------------|
+| SRS-01 | The IMU sensor shall detect wrist rotation and acceleration with an accuracy of ±10%.                   | Use usrt output wrist ratation and compare with real movitation                     | We can read and quantize it to 16384 LSB per g. and the accuracy is less than 10%|
+| SRS-03 | The ESP32 shall process gesture inputs and send control signals with latency <500 ms.                   | Control buzzer to beep when gesture happens, using stopwatch to record respond time |When we tested the Wi-Fi module, the transmission time was far less than 0.5 seconds — the data was sent almost instantly.|
+
+### HRS realized
+
+| ID                                            | Description  | Verification Method  | realization|
+| --------------------------------------------- | ----------------------------------------------------------| -------------------------------------------------------------------------------- | ----|
+| **HRS-03 (IMU Sampling and Interface)** | The IMU module shall output 3-axis acceleration and angular-velocity data at ≥ 100 Hz, communicating with the controller via I²C (400 kHz).                                        | Use UART to print the raw data from the IMU and check if it is stable.           | We read the raw IMU data at a CPU frequency of 16 MHz, but to reduce noise and improve the actual user experience, we downsample the output to roughly 5 Hz.|
+| **HRS-04 (PWM Output Hardware)**        | The fan terminal’s ESP32 shall generate motor-control signals with different frequencies and duty cycles.                                                                           | Change the command and observe the output PWM using an oscilloscope.             | In the demo, we can observe the fan’s behavior and verify that the PWM output changes accordingly as different commands are received. |
+
+### riskiest part
+
+The most risky part remaining is the performance of the IR LED and receiver. Since our IR LEDs have not arrived yet, we are unable to test them or verify their compatibility with the receiver. If this step does not go smoothly, we may need to adjust our code logic and switch to a backup solution.
+
 1. Show a system block diagram & explain the hardware implementation.
 2. Explain your firmware implementation, including application logic and critical drivers you've written.
 3. Demo your device.
