@@ -411,11 +411,15 @@ Next week we will begin full integration—combining gesture + flex data, implem
 
 ## MVP Demo
 
-### block diagram
+### Block diagram
 
 ![wvpdemo](./image/README/MVP%20demo.png)
 
 In the block diagram, we test amost each hardware. But the IR receiver just arrive today so we use simulate serial command to continue our work.
+
+**System Overview Summary**
+
+The wristband subsystem captures motion (IMU + flex sensor), performs on-device gesture recognition on the ATmega328PB, and transmits gesture codes to the ESP32-S2, which forwards them via WiFi to the appliance ESP32 node. The appliance node receives commands, processes device-selection logic, and drives terminal actuators such as fan. This modular architecture decouples sensing, communication, and actuation, making the system scalable and easy to extend to more household appliances.
 
 ### Hardware Implementation
 
@@ -473,9 +477,15 @@ The firmware also includes debugging functionality where gestures can be entered
 
 ### MVP Demo
 
+**From the demo, we have validated the full end-to-end pipeline:**
+
+ATmega gesture sensing → UART → ESP32 WiFi transmission → Appliance ESP32 → PWM motor control.
+
+**Demo Video:**
+
 [MVP Demo](https://drive.google.com/file/d/1SKOX1R7A6VJAU_8RTqxNAzLBY7lQUvXT/view?usp=sharing)
 
-**pairing and conmmand**
+**Pairing and command:**
 
 Wrist side:
 ![alt text](./image/README/commandwrist.png)
@@ -498,7 +508,21 @@ Device side:
 | **HRS-03 (IMU Sampling and Interface)** | The IMU module shall output 3-axis acceleration and angular-velocity data at ≥ 100 Hz, communicating with the controller via I²C (400 kHz). | Use UART to print the raw data from the IMU and check if it is stable. | We read the raw IMU data at a CPU frequency of 16 MHz, but to reduce noise and improve the actual user experience, we downsample the output to roughly 5 Hz. |
 | **HRS-04 (PWM Output Hardware)**        | The fan terminal’s ESP32 shall generate motor-control signals with different frequencies and duty cycles.                                    | Change the command and observe the output PWM using an oscilloscope.   | In the demo, we can observe the fan’s behavior and verify that the PWM output changes accordingly as different commands are received.                       |
 
-### riskiest part
+### Remaining elements
+
+To make the project more complete mechanically, we will transfer the working breadboard circuit onto a perf board using soldering, creating a stable and permanent electronics module. On the furniture side, we plan to use a simple machined bracket or mount so that the fan unit can be securely fixed to a desk, shelf, or bedframe, making everyday use more convenient and robust.
+
+**Supporting UI (LCD on Wristband)**
+
+We are integrating a small 160×128 TFT display to show:
+
+* Current paired device ID
+* Gesture debugging information
+* WiFi status
+
+This will significantly improve usability and allow the user to visually confirm wristband states.
+
+### Riskiest part
 
 The most risky part remaining is the performance of the IR LED and receiver. Since our IR LEDs have not arrived yet, we are unable to test them or verify their compatibility with the receiver. If this step does not go smoothly, we may need to adjust our code logic and switch to a backup solution.
 
