@@ -427,20 +427,60 @@ Next week we will begin full integration—combining gesture + flex data, implem
 
 In the block diagram, we test amost each hardware. But the IR receiver just arrive today so we use simulate serial command to continue our work.
 
-### hardware and firmware
+### Hardware Implementation
 
-**IMU**
-In our previous work, we were already able to reliably read “UP,” “DOWN,” “LEFT,” and “RIGHT” gestures from the IMU by measuring and quantizing the accelerations on the X and Y axes, setting appropriate thresholds, and classifying gestures through threshold comparison.
+**ATmega328PB (Main MCU)**
+The ATmega328PB serves as the primary controller on the wristband.
+It connects directly to the LSM6DSO IMU using the I²C bus (PC4 = SDA, PC5 = SCL), samples 6-axis motion data, performs gesture recognition, and outputs compact gesture codes (U, D, L, R) through UART0 (PD1/PD0).
+The ATmega is responsible for all sensing-side logic and low-level timing.
 
-**Flex sensor**
-We have also completed about half of the “CLOSE” and “OPEN” gesture recognition. We have already built the flex-sensor amplification circuit, achieving a rail-to-rail conversion from 3.8 V to 0 V, and we plan to use the ADC to perform the gesture classification in software.
-[flex_sensor_amp](https://drive.google.com/file/d/1_XtqX4PjBiz1Ai4PeFckXTqXbyiMufvI/view?usp=sharing)
+**IMU: LSM6DSO**
+Our IMU captures 3-axis acceleration and 3-axis gyroscope data at 104 Hz.
+Using the raw LSB values from the IMU, we quantify tilt and wrist rotation gestures.
+The IMU is configured manually through register writes (CTRL1_XL, CTRL2_G, CTRL3_C), and the ATmega retrieves data using a fully custom I²C driver.
 
-**Device:motor fan**
-We use PWM to drive the fan, converting the received commands—such as “UP”—into corresponding PWM changes and outputting them to control the device.
+**ESP32-S2 (Wristband WiFi Module)**
+The ESP32 receives gesture characters from the ATmega via UART1 and forwards them wirelessly over WiFi.
+It acts as a bridge: converting single-character UART commands into formatted WiFi packets like "UP,<id>", which are then transmitted to the appliance ESP32 node for terminal control.
 
+**Appliance ESP32 + Terminals**
+On the appliance side, a second ESP32 receives WiFi commands and drives terminal motors via PWM.
+This separation allows the wristband hardware to focus solely on gesture sensing while the appliance handles all output behaviors.
 
-**Firmware**：In our earlier work, we had already completed two separate functions: UART communication from the ATmega328PB to the wrist-end ESP32, and Wi-Fi communication between ESP32 devices. Now, we have integrated these two functions to form a complete control chain that handles pairing, gesture recognition, command transmission, command execution, and feedback. This integration allows us to realize the core functionality of our project.
+### Firmware Implementation
+
+**Application Logic (ATmega328PB)**
+The ATmega runs a loop that samples the IMU every 200 ms.
+Using the raw accelerometer axes, we detect directional gestures based on fixed thresholds (approx. 7000 LSB ≈ 0.4–0.5 g).
+To reduce noise, gestures are only transmitted when the detected gesture changes.
+Recognized gestures are encoded as 'U', 'D', 'L', or 'R' and sent via UART.
+
+**Custom I²C Driver for LSM6DSO**
+All I²C communication is implemented manually using the TWI0 peripheral.
+We wrote the low-level start, stop, write, ACK/NACK read functions, and built higher-level IMU functions such as multi-register reads and register configuration.
+This provides deterministic timing and avoids reliance on external libraries.
+
+**Custom UART0 Driver**
+The UART0 driver for the ATmega handles baud-rate setup, TX/RX control, blocking reads/writes, and supports printf() redirection for debugging.
+It ensures reliable gesture communication to the ESP32 even at low clock speeds.
+
+**Gesture Recognition Module**
+A simple threshold-based logic identifies:
+
+- UP (positive Ay)
+
+- DOWN (negative Ay)
+
+- LEFT (positive Ax)
+
+- RIGHT (negative Ax)
+
+This module filters noisy transitions by only emitting gestures when they differ from the previous state, enabling stable user interaction.
+
+**ESP32 UART + WiFi Bridge Firmware**
+On the wristband ESP32, UART1 receives the raw gesture characters from the ATmega.
+The ESP32 then maps them to string-based commands (“UP”, “DOWN”, …), appends the paired device ID, and sends them to the appliance ESP32 through a persistent TCP connection.
+The firmware also includes debugging functionality where gestures can be entered through the USB serial console.
 
 ### MVP Demo
 [MVP Demo](https://drive.google.com/file/d/1SKOX1R7A6VJAU_8RTqxNAzLBY7lQUvXT/view?usp=sharing)
@@ -472,20 +512,6 @@ Device side:
 
 The most risky part remaining is the performance of the IR LED and receiver. Since our IR LEDs have not arrived yet, we are unable to test them or verify their compatibility with the receiver. If this step does not go smoothly, we may need to adjust our code logic and switch to a backup solution.
 
-1. Show a system block diagram & explain the hardware implementation.
-2. Explain your firmware implementation, including application logic and critical drivers you've written.
-3. Demo your device.
-4. Have you achieved some or all of your Software Requirements Specification (SRS)?
-
-   1. Show how you collected data and the outcomes.
-5. Have you achieved some or all of your Hardware Requirements Specification (HRS)?
-
-   1. Show how you collected data and the outcomes.
-6. Show off the remaining elements that will make your project whole: mechanical casework, supporting graphical user interface (GUI), web portal, etc.
-7. What is the riskiest part remaining of your project?
-
-   1. How do you plan to de-risk this?
-8. What questions or help do you need from the teaching team?
 
 ## Final Project Report
 
