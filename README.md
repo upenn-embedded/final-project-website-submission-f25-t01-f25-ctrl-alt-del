@@ -487,6 +487,9 @@ ATmega gesture sensing → UART → ESP32 WiFi transmission → Appliance ESP32 
 
 **Pairing and command:**
 
+we write the serial output on ESP32 which can be check and debugging on serial monitor.
+As following:
+
 Wrist side:
 ![alt text](./image/README/commandwrist.png)
 
