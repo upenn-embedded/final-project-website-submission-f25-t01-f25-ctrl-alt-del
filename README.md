@@ -555,7 +555,11 @@ If you’ve never made a GitHub pages website before, you can follow this webpag
 
 Our final solution is a fully working gesture-controlled smart-home system consisting of a wrist-worn controller and an appliance-side gateway. On the wrist, an ATmega328PB reads 6-axis motion data from the LSM6DSO IMU over I²C and classifies four directional gestures (UP, DOWN, LEFT, RIGHT). A flex-sensor front-end (implemented as a voltage divider followed by an LM358 comparator) provides a clean digital signal that allows the ATmega to distinguish between OPEN and CLOSE hand states. Recognized gestures are encoded as compact symbols (e.g., ‘U’, ‘D’, ‘L’, ‘R’, ‘O’, ‘C’) and transmitted over UART to the wrist-side ESP32-S2, which bridges from UART to Wi-Fi.
 
-On the appliance side, a second ESP32 receives these Wi-Fi packets, parses both the gesture and the device ID, and drives the corresponding terminal hardware. In our demo, we used a DC fan as the primary example: an “UP” gesture increases the fan speed via PWM duty-cycle changes, “DOWN” decreases the speed, “RIGHT” enables an intermittent mode, and “LEFT” returns to normal continuous operation. The full interaction chain—gesture sensing → classification → UART transfer → Wi-Fi transmission → appliance-side command parsing → PWM update—operates robustly, with end-to-end latency well under one second. Console logs on both ESP32s confirm that pairing, command reception, and device control all behave as intended, even under repeated and rapid user input.
+On the appliance side, two ESP32 terminals receive Wi-Fi packets from the wrist-side controller, but only  after a pointing gesture–based device-selection (“pairing”) step . When the user performs a pointing gesture toward an appliance, the wristband activates its high-power IR LED; the appliance-side IR receiver that detects this pulse reports its device ID back over Wi-Fi, completing a lightweight pairing handshake. Only after this pairing confirmation are subsequent gesture commands routed to that device.
+
+In the final system, the first terminal ESP32 controls  Device 2 (Motor/Fan) ,  Device 1 (LED Strip) , and  Device 4 (LCD-based Air Conditioner UI) . The fan interprets UP/DOWN gestures as PWM speed adjustments and LEFT/RIGHT as mode switching (continuous vs. intermittent). The LED strip supports ON/OFF, brightness UP/DOWN, and animation-mode changes. The AC UI renders temperature, mode, and power state on a TFT display, and responds to gestures mapped to temperature increments and mode transitions. A second terminal ESP32 implements Device 3 (Phone/Music Controller) using USB HID Consumer Control, enabling gesture-driven volume and track control on a paired smartphone.
+
+Across all devices, the full interaction pipeline— pointing gesture → IR-based device selection → pairing acknowledgment → gesture sensing → ATmega classification → UART transfer → Wi-Fi transmission → dual-ESP32 parsing → device-specific actuation —remains robust, with end-to-end latency well under one second. Console logs on both ESP32 terminals confirm stable pairing, correct command routing, and reliable actuation even under rapid and repeated user input.
 
 Hardware-wise, we successfully brought up all critical subsystems: the custom IMU I²C driver, the custom UART driver between the ATmega and ESP32, the flex-sensor comparator circuit, the high-current IR-LED driver and IR receiver for device selection, and the ESP32↔ESP32 Wi-Fi link with PWM-based motor control. The IMU runs at 104 Hz and is down-sampled to a lower rate suitable for gesture recognition, while still meeting our accuracy needs for reliable direction detection. Overall, our prototype met all of the expected design goals for sensing, gesture recognition, wireless communication, IR-based device selection, and end-device control; the only planned features not fully implemented in the final demo were the speaker-based audio feedback and the haptic vibration motor.
 
@@ -576,6 +580,9 @@ Hardware-wise, we successfully brought up all critical subsystems: the custom IM
 | SRS-05 | The LCD display shall update device and command information within 1s of command recognition.            | Observe update speed using timestamped logs or slow-motion video.                   | Confirmed, we can see from the veidio that when the device ACK. The LCD show up the device name immediately and also the command.                 |
 | SRS-06 | The receiver ESP32 shall control all four output devices.                                                | Test each device's response                                                         | Confirmed, when we check all the device, it can be controled by our receiver ESP32                                                                |
 
+![1765226545054](image/README/1765226545054.png)
+
+
 #### 3.2 Hardware Requirements Specification (HRS) Results
 
 *Based on your quantified system performance, comment on how you achieved or fell short of your expected requirements.*
@@ -593,6 +600,8 @@ Hardware-wise, we successfully brought up all critical subsystems: the custom IM
 | **HRS-05 (Power and Protection)**       | All boards shall operate from a regulated 5 V ± 5 % supply; the IR-LED driver shall limit continuous current to ≤ 200 mA and include reverse-polarity and over-current protection. | Use a DMM to test all connections, voltage, and current.                         | Not comfirmed, ESP32 are supplied by 3.3V                                                                                            |
 
 ![1765224767980](image/README/1765224767980.png)
+
+![1765226670358](image/README/1765226670358.png)
 
 ### 4. Conclusion
 
