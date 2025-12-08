@@ -540,12 +540,17 @@ If you’ve never made a GitHub pages website before, you can follow this webpag
 
 ### 2. Images
 
-[Wirst side1](https://drive.google.com/file/d/1Xz4ucXDm9E4u1b9WcFFjtM1BT0dII3yA/view?usp=sharing)
-[Wirst side2](https://drive.google.com/file/d/1WhgcErW3BGIiZSoic31NKuwy08fGLp5o/view?usp=sharing)
-[Wirst side3](https://drive.google.com/file/d/1IP5SbPvfZTx0fCt1D6epOADhTgWtHuZA/view?usp=sharing)
-[LED Strip](https://drive.google.com/file/d/1lcp8hm98B-PtTK2ByB49gahcIwzHgX9o/view?usp=sharing)
-[fan](https://drive.google.com/file/d/1UMwn-juWKJpwnmXeMFitfm2X6u2r1bQq/view?usp=sharing)
-[LCD_AC](https://drive.google.com/file/d/1TK9tcr_DBCE4fsTQrN108Y63VPO1q6g1/view?usp=sharing)
+400*400 image:
+
+![1765230567894](image/README/1765230567894.png)
+
+![1765230720272](image/README/1765230720272.png)
+
+![1765230618497](image/README/1765230618497.png)
+
+![1765230684719](image/README/1765230684719.png)
+
+
 
 *Include photos of your device from a few angles. If you have a casework, show both the exterior and interior (where the good EE bits are!).*
 
@@ -591,7 +596,6 @@ One requirement—haptic vibration feedback—was not validated because the vibr
 ![1765228705841](image/README/1765228705841.png)
 
 ![1765228736008](image/README/1765228736008.png)
-
 
 #### 3.2 Hardware Requirements Specification (HRS) Results
 
