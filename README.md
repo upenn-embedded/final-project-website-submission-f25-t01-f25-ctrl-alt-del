@@ -586,6 +586,12 @@ One requirement—haptic vibration feedback—was not validated because the vibr
 
 ![1765226545054](image/README/1765226545054.png)
 
+![1765228649482](image/README/1765228649482.png)
+
+![1765228705841](image/README/1765228705841.png)
+
+![1765228736008](image/README/1765228736008.png)
+
 
 #### 3.2 Hardware Requirements Specification (HRS) Results
 
@@ -608,6 +614,10 @@ Overall, our system met most of the key hardware requirements, including stable 
 ![1765224767980](image/README/1765224767980.png)
 
 ![1765226670358](image/README/1765226670358.png)
+
+![1765228664559](image/README/1765228664559.png)
+
+![1765228678552](image/README/1765228678552.png)
 
 ### 4. Conclusion
 
