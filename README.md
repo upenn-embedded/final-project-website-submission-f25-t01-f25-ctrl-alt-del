@@ -538,9 +538,6 @@ If you’ve never made a GitHub pages website before, you can follow this webpag
 
 [Final Demo](https://drive.google.com/file/d/1iwqYzj8SS5lWVos3FztdtkV0NV1YEx-l/view?usp=sharing)
 
-* The video must demonstrate your key functionality.The video must be 5 minutes or less.
-* Ensure your video link is accessible to the teaching team. Unlisted YouTube videos or Google Drive uploads with SEAS account access work well.
-* Points will be removed if the audio quality is poor - say, if you filmed your video in a noisy electrical engineering lab.
 
 ### 2. Images
 
@@ -571,9 +568,14 @@ Hardware-wise, we successfully brought up all critical subsystems: the custom IM
 
 *Validate at least two requirements, showing how you tested and your proof of work (videos, images, logic analyzer/oscilloscope captures, etc.).*
 
-| ID     | Description                                                                                               | Validation Outcome                                                                          |
-| ------ | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| SRS-01 | The IMU 3-axis acceleration will be measured with 16-bit depth every 100 milliseconds +/-10 milliseconds. | Confirmed, logged output from the MCU is saved to "validation" folder in GitHub repository. |
+| ID     | Description (Measurable Requirement)                                                                     | Verification Method   | Validation Outcome |
+| ------ | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ---------|
+| SRS-01 | The IMU sensor shall detect wrist rotation and acceleration with an accuracy of ±10%.                   | Use usrt output wrist ratation and compare with real movitation                     | Confirmed, we using the uart to ouput IMU's raw data and the accuracy up to 1%g|
+| SRS-02 | The IR transmitter shall emit a signal detectable by receivers within 3 m in normal lighting.            | Measure IR detection distance and angle using IR receiver output.                   | Confirmed, the ir receiver can attacked by the IR over the whole lab lenght(about 5m)|
+| SRS-03 | The ESP32 shall process gesture inputs and send control signals with latency <500 ms.                   | Control buzzer to beep when gesture happens, using stopwatch to record respond time | Confirmed, our output frequency of gesture is 5Hz and prcess frquency is about 100Hz, when we check the output on uart, it generate consistently.|
+| SRS-04 | The vibration motor shall generate a feedback pulse of 200 ± 50 ms duration after each pairing success. | Measure motor activation time with stopwatch.    |Not confirmed, our cvibration motor didn't arrived |
+| SRS-05 | The LCD display shall update device and command information within 1s of command recognition.            | Observe update speed using timestamped logs or slow-motion video.                   | Confirmed, we can see from the veidio that when the device ACK. The LCD show up the device name immediately and also the command.
+| SRS-06 | The receiver ESP32 shall control all four output devices.                                                | Test each device's response                                                         | Confirmed, when we check all the device, it can be controled by our receiver ESP32|
 
 #### 3.2 Hardware Requirements Specification (HRS) Results
 
@@ -583,12 +585,21 @@ Hardware-wise, we successfully brought up all critical subsystems: the custom IM
 
 *Validate at least two requirements, showing how you tested and your proof of work (videos, images, logic analyzer/oscilloscope captures, etc.).*
 
-| ID     | Description                                                                                                                        | Validation Outcome                                                                                                      |
-| ------ | ---------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| HRS-01 | A distance sensor shall be used for obstacle detection. The sensor shall detect obstacles at a maximum distance of at least 10 cm. | Confirmed, sensed obstacles up to 15cm. Video in "validation" folder, shows tape measure and logged output to terminal. |
-|        |                                                                                                                                    |                                                                                                                         |
+| ID                                            | Description                                                                                                                                                                          | Verification Method                                                              | Validation outcome |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------- | ------ |
+| **HRS-01 (IR Selection and Detection)** | The controller shall transmit modulated IR bursts at 38 kHz. A valid hit shall be recognized and reported to the controller within 50 ms.                                            | Point to different terminals many times to verify the selection.                 | Comfirmed, our IR receiver is designed as only ACK to 38 kHz IR signal and whenever we trigger our IR LED the receiver can ACK to it|
+| **HRS-02 (IR Coverage and Range)**      | The IR link shall maintain reliable operation at 3 m ± 45° in front of the receiver under standard indoor lighting.                                                                | Point at the same terminal from different angles many times and show the result. | Not confirmed, we try to point the receiver in almost every angle, and the receiver can ACK in about 5m ±90°|
+| **HRS-03 (IMU Sampling and Interface)** | The IMU module shall output 3-axis acceleration and angular-velocity data at ≥ 100 Hz, communicating with the controller via I²C (400 kHz).                                        | Use UART to print the raw data from the IMU and check if it is stable.           | Confirmed, we configure the LSM6DSO IMU with an output data rate of 104 Hz|
+| **HRS-04 (PWM Output Hardware)**        | The fan terminal’s ESP32 shall generate motor-control signals with different frequencies and duty cycles.                                                                           | Change the command and observe the output PWM using an oscilloscope.             | Confirmed but not using oscilloscope, we can obverse it we fan change mode.|
+| **HRS-05 (Power and Protection)**       | All boards shall operate from a regulated 5 V ± 5 % supply; the IR-LED driver shall limit continuous current to ≤ 200 mA and include reverse-polarity and over-current protection. | Use a DMM to test all connections, voltage, and current.                         | Not comfirmed, ESP32 are supplied by 3.3V|
 
 ### 4. Conclusion
+
+Through this project, we learned how to integrate sensing, wireless communication, IR pairing, and real-time UI feedback into a single working system, and how each subsystem affects overall responsiveness and reliability. Our IMU pipeline and gesture-recognition logic became stable early, and the Wi-Fi communication between the ATmega328PB and the ESP32-S2 devices performed better than expected with consistently low latency. We are proud that our custom multi-device protocol, pairing design, and TFT UI all worked together smoothly in the final system.
+
+Along the way, we had to adjust our approach, especially when IR LED hardware was delayed. We redesigned parts of the pairing flow, tuned gesture output to about 5 Hz for stability, and optimized SPI drawing on the TFT to keep the UI responsive. Some steps—such as earlier hardware procurement and more structured timing tests—could have reduced debugging time, and we did encounter issues we did not anticipate, including Wi-Fi AP stability under multiple clients and IR receiver sensitivity.
+
+As a next step, we might to refine the IR subsystem, reduce power consumption, and integrate the system into a custom PCB. More advanced gesture recognition and a richer TFT interface would also move the prototype closer to a polished wearable device.
 
 Reflect on your project. Some questions to address:
 
@@ -600,7 +611,22 @@ Reflect on your project. Some questions to address:
 * What could have been done differently?
 * Did you encounter obstacles that you didn’t anticipate?
 * What could be a next step for this project?
+* 
 
 ## References
+
+References
+
+1. STMicroelectronics LSM6DSO Datasheet 
+2. ESP32-S2 Technical Reference Manual
+3. ST7735 / ST7789 TFT LCD Controller Datasheet
+4. IR Receiver Module Application Notes
+
+Library
+
+1. Arduino Core for ESP32-S2
+2. Adafruit_GFX Library
+3. Adafruit_ST7735 / ST7789 Library
+4. WiFi.h & WiFiClient.h
 
 Fill in your references here as you work on your final project. Describe any libraries used here.
