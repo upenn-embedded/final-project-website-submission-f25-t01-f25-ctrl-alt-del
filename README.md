@@ -536,7 +536,7 @@ If you’ve never made a GitHub pages website before, you can follow this webpag
 
 ### 1. Video
 
-[Insert final project video here]
+[Final Demo](https://drive.google.com/file/d/1iwqYzj8SS5lWVos3FztdtkV0NV1YEx-l/view?usp=sharing)
 
 * The video must demonstrate your key functionality.The video must be 5 minutes or less.
 * Ensure your video link is accessible to the teaching team. Unlisted YouTube videos or Google Drive uploads with SEAS account access work well.
@@ -544,13 +544,24 @@ If you’ve never made a GitHub pages website before, you can follow this webpag
 
 ### 2. Images
 
-[Insert final project images here]
+[Wirst side1](https://drive.google.com/file/d/1Xz4ucXDm9E4u1b9WcFFjtM1BT0dII3yA/view?usp=sharing)
+[Wirst side2](https://drive.google.com/file/d/1WhgcErW3BGIiZSoic31NKuwy08fGLp5o/view?usp=sharing)
+[Wirst side3](https://drive.google.com/file/d/1IP5SbPvfZTx0fCt1D6epOADhTgWtHuZA/view?usp=sharing)
+[LED Strip](https://drive.google.com/file/d/1lcp8hm98B-PtTK2ByB49gahcIwzHgX9o/view?usp=sharing)
+[fan](https://drive.google.com/file/d/1UMwn-juWKJpwnmXeMFitfm2X6u2r1bQq/view?usp=sharing)
+[LCD_AC](https://drive.google.com/file/d/1TK9tcr_DBCE4fsTQrN108Y63VPO1q6g1/view?usp=sharing)
 
 *Include photos of your device from a few angles. If you have a casework, show both the exterior and interior (where the good EE bits are!).*
 
 ### 3. Results
 
 *What were your results? Namely, what was the final solution/design to your problem?*
+
+Our final solution is a fully working gesture-controlled smart-home system consisting of a wrist-worn controller and an appliance-side gateway. On the wrist, an ATmega328PB reads 6-axis motion data from the LSM6DSO IMU over I²C and classifies four directional gestures (UP, DOWN, LEFT, RIGHT). A flex-sensor front-end (implemented as a voltage divider followed by an LM358 comparator) provides a clean digital signal that allows the ATmega to distinguish between OPEN and CLOSE hand states. Recognized gestures are encoded as compact symbols (e.g., ‘U’, ‘D’, ‘L’, ‘R’, ‘O’, ‘C’) and transmitted over UART to the wrist-side ESP32-S2, which bridges from UART to Wi-Fi.
+
+On the appliance side, a second ESP32 receives these Wi-Fi packets, parses both the gesture and the device ID, and drives the corresponding terminal hardware. In our demo, we used a DC fan as the primary example: an “UP” gesture increases the fan speed via PWM duty-cycle changes, “DOWN” decreases the speed, “RIGHT” enables an intermittent mode, and “LEFT” returns to normal continuous operation. The full interaction chain—gesture sensing → classification → UART transfer → Wi-Fi transmission → appliance-side command parsing → PWM update—operates robustly, with end-to-end latency well under one second. Console logs on both ESP32s confirm that pairing, command reception, and device control all behave as intended, even under repeated and rapid user input.
+
+Hardware-wise, we successfully brought up all critical subsystems: the custom IMU I²C driver, the custom UART driver between the ATmega and ESP32, the flex-sensor comparator circuit, the high-current IR-LED driver and IR receiver for device selection, and the ESP32↔ESP32 Wi-Fi link with PWM-based motor control. The IMU runs at 104 Hz and is down-sampled to a lower rate suitable for gesture recognition, while still meeting our accuracy needs for reliable direction detection. Overall, our prototype met all of the expected design goals for sensing, gesture recognition, wireless communication, IR-based device selection, and end-device control; the only planned features not fully implemented in the final demo were the speaker-based audio feedback and the haptic vibration motor.
 
 #### 3.1 Software Requirements Specification (SRS) Results
 
