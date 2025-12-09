@@ -14,13 +14,12 @@
 
 **GitHub Repository URL: https://github.com/upenn-embedded/final-project-f25-f25-final_project_t1.git**
 
-**GitHub Pages Website URL:https://github.com/upenn-embedded/final-project-website-submission-f25-t01-f25-ctrl-alt-del**
+**GitHub Pages Website URL: https://upenn-embedded.github.io/gesture_iot/**
 
 ## Final Project Proposal
 
 ### 1. Abstract
 
-*In a few sentences, describe your final project.*
 
 Our system is a gesture-controlled smart home wristband that enables users to control multiple household devices. The wrist module integrates an ESP32, IMU, LCD display, vibration motor (for user feedback), ATmega32 , and  infrared transmitter . It recognizes gestures to generate control commands and allows users to select the target device either by pointing with the infrared beam or by waving to cycle through devices shown on the wrist display.
 
