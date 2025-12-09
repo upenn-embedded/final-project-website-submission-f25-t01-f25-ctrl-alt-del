@@ -14,7 +14,7 @@
 
 **GitHub Repository URL: https://github.com/upenn-embedded/final-project-f25-f25-final_project_t1.git**
 
-**GitHub Pages Website URL:** [for final submission]*
+**GitHub Pages Website URL:https://github.com/upenn-embedded/final-project-website-submission-f25-t01-f25-ctrl-alt-del**
 
 ## Final Project Proposal
 
@@ -531,8 +531,6 @@ The most risky part remaining is the performance of the IR LED and receiver. Sin
 
 ## Final Project Report
 
-Don't forget to make the GitHub pages public website!
-If you’ve never made a GitHub pages website before, you can follow this webpage (though, substitute your final project repository for the GitHub username one in the quickstart guide):  [https://docs.github.com/en/pages/quickstart](https://docs.github.com/en/pages/quickstart)
 
 ### 1. Video
 
@@ -550,10 +548,6 @@ If you’ve never made a GitHub pages website before, you can follow this webpag
 
 ![1765230684719](image/README/1765230684719.png)
 
-
-
-*Include photos of your device from a few angles. If you have a casework, show both the exterior and interior (where the good EE bits are!).*
-
 ### 3. Results
 
 *What were your results? Namely, what was the final solution/design to your problem?*
@@ -569,12 +563,6 @@ Across all devices, the full interaction pipeline— pointing gesture → IR-bas
 Hardware-wise, we successfully brought up all critical subsystems: the custom IMU I²C driver, the custom UART driver between the ATmega and ESP32, the flex-sensor comparator circuit, the high-current IR-LED driver and IR receiver for device selection, and the ESP32↔ESP32 Wi-Fi link with PWM-based motor control. The IMU runs at 104 Hz and is down-sampled to a lower rate suitable for gesture recognition, while still meeting our accuracy needs for reliable direction detection. Overall, our prototype met all of the expected design goals for sensing, gesture recognition, wireless communication, IR-based device selection, and end-device control; the only planned features not fully implemented in the final demo were the speaker-based audio feedback and the haptic vibration motor.
 
 #### 3.1 Software Requirements Specification (SRS) Results
-
-*Based on your quantified system performance, comment on how you achieved or fell short of your expected requirements.*
-
-*Did your requirements change? If so, why? Failing to meet a requirement is acceptable; understanding the reason why is critical!*
-
-*Validate at least two requirements, showing how you tested and your proof of work (videos, images, logic analyzer/oscilloscope captures, etc.).*
 
 Overall, the system met most of the software requirements, including accurate IMU gesture detection, reliable IR-based selection, low-latency ESP32 command processing, and timely LCD UI updates. The IMU pipeline exceeded expectations, achieving stable readings with accuracy better than ±10%, and gesture-processing latency remained well below the 500 ms requirement due to a 5 Hz gesture-output rate and ~100 Hz processing loop. IR detection range significantly outperformed the original software expectation of 3 m, requiring us to update the requirement based on real behavior.
 
@@ -599,12 +587,6 @@ One requirement—haptic vibration feedback—was not validated because the vibr
 
 #### 3.2 Hardware Requirements Specification (HRS) Results
 
-*Based on your quantified system performance, comment on how you achieved or fell short of your expected requirements.*
-
-*Did your requirements change? If so, why? Failing to meet a requirement is acceptable; understanding the reason why is critical!*
-
-*Validate at least two requirements, showing how you tested and your proof of work (videos, images, logic analyzer/oscilloscope captures, etc.).*
-
 | ID                                            | Description                                                                                                                                                                          | Verification Method                                                              | Validation outcome                                                                                                                   |
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | **HRS-01 (IR Selection and Detection)** | The controller shall transmit modulated IR bursts at 38 kHz. A valid hit shall be recognized and reported to the controller within 50 ms.                                            | Point to different terminals many times to verify the selection.                 | Comfirmed, our IR receiver is designed as only ACK to 38 kHz IR signal and whenever we trigger our IR LED the receiver can ACK to it |
@@ -627,24 +609,13 @@ Overall, our system met most of the key hardware requirements, including stable 
 
 Through this project, we learned how to integrate sensing, wireless communication, IR-based device pairing, and real-time UI feedback into a single working system, and how tightly each subsystem influences overall responsiveness and reliability. Our IMU pipeline and gesture-recognition logic stabilized early, and the UART-to-Wi-Fi communication between the ATmega328PB and the ESP32-S2 performed better than expected, consistently maintaining low latency during rapid gesture input. We are especially proud that our custom multi-device protocol, pairing design, and TFT UI—along with the motor controller, LED strip driver, and USB-based music controller—came together into a coherent multi-device ecosystem that operated reliably in the final demo.
 
-We also gained experience adapting our design when unexpected constraints arose. Early in the project, we planned to integrate a  **speaker system driven by a dedicated audio amplifier** , but due to delayed hardware delivery, we pivoted to a different solution: using the ESP32-S2’s **USB HID Consumer Control** interface to control music playback on a smartphone. This change required rethinking our command pipeline but ultimately resulted in a more stable and demonstrable audio-control subsystem. Similarly, when the IR LED hardware arrived late, we redesigned significant portions of the pairing workflow and restructured how gesture commands were queued and dispatched. We tuned gesture output to about 5 Hz for improved stability and optimized SPI drawing on the TFT-LCD to maintain UI responsiveness on the appliance-side ESP32.
+We also gained experience adapting our design when unexpected constraints arose. Early in the project, we planned to integrate a  speaker system driven by a dedicated audio amplifier , but due to delayed hardware delivery, we pivoted to a different solution: using the ESP32-S2’s USB HID Consumer Control interface to control music playback on a smartphone. This change required rethinking our command pipeline but ultimately resulted in a more stable and demonstrable audio-control subsystem. Similarly, when the IR LED hardware arrived late, we redesigned significant portions of the pairing workflow and restructured how gesture commands were queued and dispatched. We tuned gesture output to about 5 Hz for improved stability and optimized SPI drawing on the TFT-LCD to maintain UI responsiveness on the appliance-side ESP32.
 
 Several things went well: our IR pairing protocol worked reliably after refinement; our dual-ESP32 device architecture (one controlling the motor, LED strip, and AC-style TFT UI, and another dedicated to phone/music control) proved clean and modular; and the end-to-end interaction pipeline remained responsive even under repeated commands. These accomplishments gave us a deeper understanding of embedded protocol design, multi-device coordination, and timing-sensitive UI rendering.
 
 At the same time, there are areas we would approach differently. Earlier hardware procurement—especially for the IR LEDs, IR receivers, and audio amplifier—would have significantly reduced debugging pressure. More systematic timing tests, automated Wi-Fi throughput measurements, and earlier power-budget analysis would also have helped us catch bottlenecks sooner. We also encountered challenges we did not anticipate, such as Wi-Fi AP instability with multiple ESP32 clients, IR-receiver sensitivity variations across devices, and unexpected delays in SPI-based TFT rendering before optimization.
 
 As next steps, we would like to refine the IR subsystem for better range and noise tolerance, reduce system-wide power consumption, and migrate everything onto a custom PCB for improved robustness. Incorporating a richer TFT interface, restoring the original speaker-and-amplifier audio subsystem, and exploring more advanced gesture-recognition algorithms would move the prototype closer to a polished, consumer-ready wearable.
-
-Reflect on your project. Some questions to address:upda
-
-* What did you learn from it?
-* What went well?
-* What accomplishments are you proud of?
-* What did you learn/gain from this experience?
-* Did you have to change your approach?
-* What could have been done differently?
-* Did you encounter obstacles that you didn’t anticipate?
-* What could be a next step for this project?
 
 ## References
 
@@ -661,5 +632,8 @@ Library
 2. Adafruit_GFX Library
 3. Adafruit_ST7735 / ST7789 Library
 4. WiFi.h & WiFiClient.h
-
-Fill in your references here as you work on your final project. Describe any libraries used here.
+5. Adafruit_NeoPixel.h
+6. Arduino.h
+7. SPI.h
+8. USB.h
+9. USBHIDConsumerControl.h
