@@ -12,7 +12,7 @@
 | Sirui Wu         | wu40@seas.upenn.edu     |
 | Jingyi Huang     | huang965@seas.upenn.edu |
 
-**GitHub Repository URL: https://github.com/upenn-embedded/final-project-f25-f25-final_project_t1.git**
+**GitHub Repository URL: https://github.com/upenn-embedded/final-project-website-submission-f25-t01-f25-ctrl-alt-del**
 
 **GitHub Pages Website URL: https://upenn-embedded.github.io/gesture_iot/**
 
