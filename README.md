@@ -538,8 +538,6 @@ The most risky part remaining is the performance of the IR LED and receiver. Sin
 
 ### 2. Images
 
-400*400 image:
-
 ![1765230567894](image/README/1765230567894.png)
 
 ![1765230720272](image/README/1765230720272.png)
@@ -550,7 +548,6 @@ The most risky part remaining is the performance of the IR LED and receiver. Sin
 
 ### 3. Results
 
-*What were your results? Namely, what was the final solution/design to your problem?*
 
 Our final solution is a fully working gesture-controlled smart-home system consisting of a wrist-worn controller and an appliance-side gateway. On the wrist, an ATmega328PB reads 6-axis motion data from the LSM6DSO IMU over I²C and classifies four directional gestures (UP, DOWN, LEFT, RIGHT). A flex-sensor front-end (implemented as a voltage divider followed by an LM358 comparator) provides a clean digital signal that allows the ATmega to distinguish between OPEN and CLOSE hand states. Recognized gestures are encoded as compact symbols (e.g., ‘U’, ‘D’, ‘L’, ‘R’, ‘O’, ‘C’) and transmitted over UART to the wrist-side ESP32-S2, which bridges from UART to Wi-Fi.
 
